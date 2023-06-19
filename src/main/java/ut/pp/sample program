@@ -25,7 +25,6 @@ Bool bool = True
 
 Int a
 Print(a)
--- Not allowed
 
 -- D1.3 Simple expressions and variables
 IsBiggerThan
@@ -53,12 +52,27 @@ While (bool) {
 
 Print(a)
 
--- D1.5 Concurrency
-RunParallel(Int a) {
-    Int a = 8
-    
-}
+-- D1.5
+parbegin
+    -- Parallel block
+    Int x
+    Int y
+    If (x IsSmallerThan y) {
+        -- Statements in parallel
+    }
+parend
 
+
+Int z
+-- define local or global during concurrency
+runInParallel([x, y],[z]){
+    -- Parallel block
+    Int x
+    Int y
+    If (x IsSmallerThan y) {
+        -- Statements in parallel
+    }
+}
 
 
 
