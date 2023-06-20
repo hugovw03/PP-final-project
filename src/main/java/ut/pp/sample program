@@ -62,6 +62,8 @@ parbegin
     }
 parend
 
+// Locking
+------------------------------------------------------------
 
 Int z
 -- define local or global during concurrency
@@ -71,8 +73,75 @@ runInParallel([x, y],[z]){
     Int y
     If (x IsSmallerThan y) {
         -- Statements in parallel
+        Local Int x
     }
+}
+
+// different methods run in parallel
+------------------------------------------------------------
+
+Non-Thread-safe:
+
+GlobalInt sum
+
+DoAddition(Int n, Int p){
+    sum = n + p
+}
+
+DoSub (Int n , Int p) {
+    sum = n - p
+}
+
+Int a
+Int b
+
+RunInParallel(Int 2){
+    If(this.ThreadId == 0) {
+        DoAddition(a, b)
+    }
+    else {
+    DoSub(a, b)
+    }
+    print(sum)
+}
+
+// Thread-safe and non-Thread-safe
+-------------------------------------------------------------
+Thread-safe:
+
+
+Global Int sum
+Global Lock lock
+DoAddition{
+    Local Int n = 2
+    Local Int p = 8
+    lock.lock
+    sum = n + p
+    lock.unlock
+}
+
+DoSub {
+    Local Int n = 2
+    Local Int p = 8
+    lock.lock
+    sum = n - p
+    lock.unlock
+}
+
+Int a
+Int b
+--
+# Local a,b
+RunInParallel(Int 2){
+    If(this.ThreadId == 0) {
+        DoAddition(a, b)
+    }
+    else {
+    DoSub(a, b)
+    }
+    print(sum)
 }
 
 
 
+// branch on thread ID
