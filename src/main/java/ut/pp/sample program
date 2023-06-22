@@ -1,6 +1,5 @@
 integers and booleans
 
-
 -- D1.1 Data type
 
 Int int = 6
@@ -42,11 +41,12 @@ Div
 
 -- D1.4 Basic statements: Assignments, if, while and print
 
-Int a Int b
+Int a;
+Int b;
 If (a IsBiggerOrEqualThan b) {
 }
 
-Bool bool
+Bool bool;
 While (bool) {
 }
 
@@ -64,7 +64,6 @@ parend
 
 // Locking
 ------------------------------------------------------------
-
 Int z
 -- define local or global during concurrency
 runInParallel([x, y],[z]){
@@ -108,7 +107,6 @@ RunInParallel(Int 2){
 // Thread-safe and non-Thread-safe
 -------------------------------------------------------------
 Thread-safe:
-
 
 Global Int sum
 Global Lock lock
