@@ -1,29 +1,29 @@
-grammar Natural;
+grammar NaturalParser;
 
-import NaturalVocab;
+import NaturalLexer;
 
 
 // Helper rules
 identifier: ID;
-condition: DATA_TYPE EQUALS DATA_TYPE;
+condition: data_type EQUALS data_type;
 constant_value: CONST_INT | CONST_BOOL;
-SCOPE_LEVEL: GLOBAL | LOCAL;
+scope_level: GLOBAL | LOCAL;
 //TODO: maybe need syntax check for locks
-DATA_TYPE: INT | BOOL | LOCK;
-
+data_type: INT | BOOL | LOCK;
+somethinghereeeeeee : constant_value*;
 
 // Int a = 5;
-data_type_definition: DATA_TYPE identifier (ASSIGN constant_value SEMICOLON)?;
+data_type_definition: data_type identifier (ASSIGN constant_value SEMICOLON)?;
 
 //Global Int a = 5;
-scope_type_definition: SCOPE_LEVEL data_type_definition;
+scope_type_definition: scope_level data_type_definition;
 
 
 if_statement:  IF condition BRAC expr* BRAC;
 
 while_statement: WHILE condition BRAC expr* BRAC;
 
-print_statement: PRINT PARENS ;
+print_statement: PRINT PARENS somethinghereeeeeee PARENS;
 
 //TODO:
 parallel_statement: RUNPAR PARENS INT CONST_INT PARENS;

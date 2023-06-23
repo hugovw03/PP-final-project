@@ -1,9 +1,7 @@
-integers and booleans
-
--- D1.1 Data type
-
-Int int = 6
-Bool bool = True
+Data type : integers and booleans
+--------------------------------------------------------
+Int int = 6;
+Bool bool = True;
 
 
 
@@ -19,8 +17,8 @@ Bool bool = True
                 Print (b)
             }
         }
-
 -- Variables should also be checked for initialisation
+
 
 Int a
 Print(a)
@@ -39,19 +37,6 @@ Mult
 Div
 
 
--- D1.4 Basic statements: Assignments, if, while and print
-
-Int a;
-Int b;
-If (a IsBiggerOrEqualThan b) {
-}
-
-Bool bool;
-While (bool) {
-}
-
-Print(a)
-
 -- D1.5
 parbegin
     -- Parallel block
@@ -64,7 +49,6 @@ parend
 
 // Locking
 ------------------------------------------------------------
-Int z
 -- define local or global during concurrency
 runInParallel([x, y],[z]){
     -- Parallel block
@@ -76,9 +60,8 @@ runInParallel([x, y],[z]){
     }
 }
 
-// different methods run in parallel
+different methods run in parallel
 ------------------------------------------------------------
-
 Non-Thread-safe:
 
 GlobalInt sum
@@ -125,10 +108,10 @@ DoSub {
     sum = n - p
     lock.unlock
 }
+// Then branch on thread ID
+Int a;
+Int b;
 
-Int a
-Int b
---
 # Local a,b
 RunInParallel(Int 2){
     If(this.ThreadId == 0) {
@@ -142,4 +125,3 @@ RunInParallel(Int 2){
 
 
 
-// branch on thread ID

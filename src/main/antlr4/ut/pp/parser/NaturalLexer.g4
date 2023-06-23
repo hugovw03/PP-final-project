@@ -1,4 +1,4 @@
-grammar NaturalVocab;
+lexer grammar NaturalLexer;
 
 //key words
 INT:    'Int';
