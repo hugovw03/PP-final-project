@@ -4,109 +4,102 @@ Int int = 6;
 Bool bool = True;
 
 
-
--- D1.2 Simple expressions and variables
+Basic statements: Assignments, if, while and print
+--------------------------------------------------------
+-- Global & Local & Lock
+        Global Int a;
+        Local Int b;
+        Lock lock;
 
 -- local, nested scopes.
-
-        Int a
-        Int b
+        Int a;
+        Int b;
         If (a IsBiggerThan b) {
-            Bool a = True
+            Bool a = True;
             While (a) {
-                Print (b)
+                Print (b);
             }
         }
 -- Variables should also be checked for initialisation
 
 
-Int a
-Print(a)
-
--- D1.3 Simple expressions and variables
-IsBiggerThan
-IsSmallerThan
-IsEqualThan
-IsSmallerOrEqualThan
-IsBiggerOrEqualThan
-Add
-Sub
-And
-Or
-Mult
-Div
+Simple expressions and variables
+--------------------------------------------------------
+IsBiggerThan;
+IsSmallerThan;
+IsEqualThan;
+IsSmallerOrEqualThan;
+IsBiggerOrEqualThan;
+Add;
+Sub;
+And;
+Or;
+Mult;
 
 
--- D1.5
-parbegin
-    -- Parallel block
-    Int x
-    Int y
-    If (x IsSmallerThan y) {
-        -- Statements in parallel
-    }
-parend
-
-// Locking
+Locking
 ------------------------------------------------------------
 -- define local or global during concurrency
-runInParallel([x, y],[z]){
+Global Lock lock;
+RunInParallel(int threadNum){
     -- Parallel block
-    Int x
-    Int y
+    Local Int x;
+    Local Int y;
+    lock.lock;  //lock following blocks
     If (x IsSmallerThan y) {
         -- Statements in parallel
-        Local Int x
+        Local Int x; // the local int x is in 3rd scope
     }
+    lock.unlock;
 }
 
 different methods run in parallel
 ------------------------------------------------------------
 Non-Thread-safe:
 
-GlobalInt sum
+Global Int sum
 
 DoAddition(Int n, Int p){
-    sum = n + p
+    sum = n + p;
 }
 
 DoSub (Int n , Int p) {
-    sum = n - p
+    sum = n - p;
 }
 
-Int a
-Int b
+Int a;
+Int b;
 
 RunInParallel(Int 2){
     If(this.ThreadId == 0) {
-        DoAddition(a, b)
+        DoAddition(a, b);
     }
     else {
-    DoSub(a, b)
+    DoSub(a, b);
     }
-    print(sum)
+    print(sum);
 }
 
 // Thread-safe and non-Thread-safe
 -------------------------------------------------------------
 Thread-safe:
 
-Global Int sum
-Global Lock lock
+Global Int sum;
+Global Lock lock;
 DoAddition{
-    Local Int n = 2
-    Local Int p = 8
-    lock.lock
-    sum = n + p
-    lock.unlock
+    Local Int n = 2;
+    Local Int p = 8;
+    lock.lock;
+    sum = n + p;
+    lock.unlock;
 }
 
 DoSub {
-    Local Int n = 2
-    Local Int p = 8
-    lock.lock
-    sum = n - p
-    lock.unlock
+    Local Int n = 2;
+    Local Int p = 8;
+    lock.lock;
+    sum = n - p;
+    lock.unlock;
 }
 // Then branch on thread ID
 Int a;
@@ -115,12 +108,12 @@ Int b;
 # Local a,b
 RunInParallel(Int 2){
     If(this.ThreadId == 0) {
-        DoAddition(a, b)
+        DoAddition(a, b);
     }
     else {
-    DoSub(a, b)
+    DoSub(a, b);
     }
-    print(sum)
+    print(sum);
 }
 
 
