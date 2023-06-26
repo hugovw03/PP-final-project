@@ -1,6 +1,6 @@
 grammar NaturalAttr;
 
-import NaturalVocab;
+import NaturalLExer;
 
 //@members {
 //    private int getValue(String text) {
