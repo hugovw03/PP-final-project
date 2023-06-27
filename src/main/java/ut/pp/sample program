@@ -20,6 +20,9 @@ Basic statements: Assignments, if, while and print
                 Print (b);
             }
         }
+        Else {
+            a = 5;
+        }
 -- Variables should also be checked for initialisation
 
 

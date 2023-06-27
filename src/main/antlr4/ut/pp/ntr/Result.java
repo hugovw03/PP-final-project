@@ -1,4 +1,4 @@
-package main.antlr4.ut.pp.parser;
+package main.antlr4.ut.pp.ntr;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;

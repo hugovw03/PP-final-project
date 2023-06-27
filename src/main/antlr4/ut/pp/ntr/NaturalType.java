@@ -1,4 +1,4 @@
-package main.antlr4.ut.pp.parser;
+package main.antlr4.ut.pp.ntr;
 
 
 /** Pascal data type. */
@@ -43,6 +43,7 @@ abstract public class NaturalType {
         @Override
         public int size() {
 //            return Machine.INT_SIZE;
+            return 1;
         }
 
         @Override
