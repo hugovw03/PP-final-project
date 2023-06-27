@@ -5,31 +5,44 @@ import NaturalLexer;
 
 // Helper rules
 identifier: ID;
-condition: data_type EQUALS data_type;
 constant_value: CONST_INT | CONST_BOOL;
 scope_level: GLOBAL | LOCAL;
 //TODO: maybe need syntax check for locks
 data_type: INT | BOOL | LOCK;
-somethinghereeeeeee : constant_value*;
+somethinghereeeeeee : CONST_INT* | ID*;
 
-// Int a = 5;
-data_type_definition: data_type identifier (ASSIGN constant_value SEMICOLON)?;
+//if
+//TODO: the conditionPara should accept a multexpr ..
+conditionPara:  identifier | constant_value | op_expr;
+condition: LPAR conditionPara EQUALS conditionPara RPAR;
+if_statement:  IF condition LBRAC expr* RBRAC;
+
+
+//Int a = 5;
+//Int b;
+data_type_definition: data_type identifier (ASSIGN op_expr )? SEMICOLON;
 
 //Global Int a = 5;
-scope_type_definition: scope_level data_type_definition;
+scope_type_definition: scope_level data_type_definition SEMICOLON;
 
+//Op
+opPara : CONST_INT | identifier;
 
-if_statement:  IF condition BRAC expr* BRAC;
+op_expr : op_expr TIMES op_expr
+        | op_expr PLUS op_expr
+        | op_expr MINUS op_expr
+        | opPara;
 
-while_statement: WHILE condition BRAC expr* BRAC;
+assignment_statement: identifier ASSIGN op_expr SEMICOLON;
 
-print_statement: PRINT PARENS somethinghereeeeeee PARENS;
+//statments
 
-//TODO:
-parallel_statement: RUNPAR PARENS INT CONST_INT PARENS;
+while_statement: WHILE condition LBRAC expr* RBRAC;
 
-//TODO:
-assignment_statement: identifier ASSIGN constant_value;
+print_statement: PRINT LPAR somethinghereeeeeee RPAR SEMICOLON;
+
+parallel_statement: RUNPAR LPAR  INT CONST_INT RPAR LBRAC expr* RBRAC;
+
 
 
 
@@ -40,4 +53,6 @@ expr:     data_type_definition
         | if_statement
         | while_statement
         | print_statement
-        | parallel_statement;
+        | op_expr
+        | parallel_statement
+        | CHAR;

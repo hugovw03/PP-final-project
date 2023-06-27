@@ -17,12 +17,6 @@ public interface NaturalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIdentifier(NaturalParserParser.IdentifierContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link NaturalParserParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCondition(NaturalParserParser.ConditionContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link NaturalParserParser#constant_value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -47,6 +41,24 @@ public interface NaturalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSomethinghereeeeeee(NaturalParserParser.SomethinghereeeeeeeContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link NaturalParserParser#conditionPara}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConditionPara(NaturalParserParser.ConditionParaContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link NaturalParserParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondition(NaturalParserParser.ConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link NaturalParserParser#if_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIf_statement(NaturalParserParser.If_statementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link NaturalParserParser#data_type_definition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -59,11 +71,23 @@ public interface NaturalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitScope_type_definition(NaturalParserParser.Scope_type_definitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link NaturalParserParser#if_statement}.
+	 * Visit a parse tree produced by {@link NaturalParserParser#opPara}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIf_statement(NaturalParserParser.If_statementContext ctx);
+	T visitOpPara(NaturalParserParser.OpParaContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link NaturalParserParser#op_expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOp_expr(NaturalParserParser.Op_exprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link NaturalParserParser#assignment_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignment_statement(NaturalParserParser.Assignment_statementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link NaturalParserParser#while_statement}.
 	 * @param ctx the parse tree
@@ -82,12 +106,6 @@ public interface NaturalParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParallel_statement(NaturalParserParser.Parallel_statementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link NaturalParserParser#assignment_statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssignment_statement(NaturalParserParser.Assignment_statementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link NaturalParserParser#expr}.
 	 * @param ctx the parse tree

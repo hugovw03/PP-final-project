@@ -9,15 +9,16 @@ PRINT:  'Print';
 LOCAL:  'Local';
 GLOBAL: 'Global';
 LOCK:   'Lock';
+TRUE:   'True';
+FALSE:  'False';
+
+SEMICOLON:   ';';
+LBRAC:       '{' ;
+RBRAC:       '}';
+LPAR:        '(' ;
+RPAR:         ')';
 
 
-SEMICOLON:  ';';
-BRAC:       '{' | '}';
-PARENS:     '(' | ')';
-
-
-CONST_INT: [0-9]+;
-ID: [a-zA-Z][a-zA-Z0-9]*;
 
 //Op
 TIMES  : '*';
@@ -34,5 +35,12 @@ EQUALS: 'IsBiggerThan'
      |  'IsBiggerThanOrEqualTo'
      |  'NotEqualTo';
 
-CONST_BOOL: 'True' | 'False';
+CONST_BOOL: TRUE | FALSE;
 
+CONST_INT: [0-9]+;
+ID: [a-zA-Z][a-zA-Z0-9]*;
+
+COMMENT : '/*' .*? '*/' -> channel(HIDDEN);
+
+WS: [\t\n\r]+ -> skip;
+//CHAR: '\'' ~'\'' +'\'';

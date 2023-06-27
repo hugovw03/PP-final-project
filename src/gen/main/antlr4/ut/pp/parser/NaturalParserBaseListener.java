@@ -29,18 +29,6 @@ public class NaturalParserBaseListener implements NaturalParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCondition(NaturalParserParser.ConditionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCondition(NaturalParserParser.ConditionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterConstant_value(NaturalParserParser.Constant_valueContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -89,6 +77,42 @@ public class NaturalParserBaseListener implements NaturalParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConditionPara(NaturalParserParser.ConditionParaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConditionPara(NaturalParserParser.ConditionParaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCondition(NaturalParserParser.ConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCondition(NaturalParserParser.ConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIf_statement(NaturalParserParser.If_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIf_statement(NaturalParserParser.If_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterData_type_definition(NaturalParserParser.Data_type_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -113,13 +137,37 @@ public class NaturalParserBaseListener implements NaturalParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIf_statement(NaturalParserParser.If_statementContext ctx) { }
+	@Override public void enterOpPara(NaturalParserParser.OpParaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIf_statement(NaturalParserParser.If_statementContext ctx) { }
+	@Override public void exitOpPara(NaturalParserParser.OpParaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOp_expr(NaturalParserParser.Op_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOp_expr(NaturalParserParser.Op_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignment_statement(NaturalParserParser.Assignment_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignment_statement(NaturalParserParser.Assignment_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -156,18 +204,6 @@ public class NaturalParserBaseListener implements NaturalParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParallel_statement(NaturalParserParser.Parallel_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAssignment_statement(NaturalParserParser.Assignment_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAssignment_statement(NaturalParserParser.Assignment_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
