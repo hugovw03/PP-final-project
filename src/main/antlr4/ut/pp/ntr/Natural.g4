@@ -2,7 +2,7 @@ grammar Natural;
 
 program: stat+ EOF;
 
-stat: decl                                      #declGlobalandLocal
+stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobalAndLocal
     | type ID (ASSIGN expr)? SEMICOLON          #declNormal
     | ID ASSIGN expr SEMICOLON                  #assignToVar
     | IF LPAR expr RPAR stat (ELSE stat)?       #ifStat

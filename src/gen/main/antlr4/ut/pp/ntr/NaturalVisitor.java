@@ -17,12 +17,12 @@ public interface NaturalVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(NaturalParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code declGlobalandLocal}
+	 * Visit a parse tree produced by the {@code declGlobalAndLocal}
 	 * labeled alternative in {@link NaturalParser#stat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclGlobalandLocal(NaturalParser.DeclGlobalandLocalContext ctx);
+	T visitDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code declNormal}
 	 * labeled alternative in {@link NaturalParser#stat}.

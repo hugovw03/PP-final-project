@@ -25,7 +25,7 @@ public class NaturalBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDeclGlobalandLocal(NaturalParser.DeclGlobalandLocalContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -29,13 +29,13 @@ public class NaturalBaseListener implements NaturalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclGlobalandLocal(NaturalParser.DeclGlobalandLocalContext ctx) { }
+	@Override public void enterDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclGlobalandLocal(NaturalParser.DeclGlobalandLocalContext ctx) { }
+	@Override public void exitDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

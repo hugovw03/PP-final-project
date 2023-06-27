@@ -18,17 +18,17 @@ public interface NaturalListener extends ParseTreeListener {
 	 */
 	void exitProgram(NaturalParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code declGlobalandLocal}
+	 * Enter a parse tree produced by the {@code declGlobalAndLocal}
 	 * labeled alternative in {@link NaturalParser#stat}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclGlobalandLocal(NaturalParser.DeclGlobalandLocalContext ctx);
+	void enterDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code declGlobalandLocal}
+	 * Exit a parse tree produced by the {@code declGlobalAndLocal}
 	 * labeled alternative in {@link NaturalParser#stat}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclGlobalandLocal(NaturalParser.DeclGlobalandLocalContext ctx);
+	void exitDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code declNormal}
 	 * labeled alternative in {@link NaturalParser#stat}.
