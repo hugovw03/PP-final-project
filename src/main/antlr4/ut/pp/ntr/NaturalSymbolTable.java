@@ -1,6 +1,7 @@
 package main.antlr4.ut.pp.ntr;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,24 +10,30 @@ import java.util.Stack;
 public class NaturalSymbolTable implements SymbolTable<ParseTree> {
 
     private Stack<Map<String, ParseTree>> scopes;
+    //for later use Information lost when scope is closed (i.e., stack is popped)
+    private ParseTreeProperty<String> nameProperty;
+
 
     public NaturalSymbolTable() {
         scopes = new Stack<>();
-        openScope(); // Initialize with the outer scope
+        nameProperty = new ParseTreeProperty<>();
+        openScope(); // Start with the outermost scope
     }
 
     @Override
     public void openScope() {
         scopes.push(new HashMap<>());
+//        int x = scopeStack.size();
+//        System.out.println("scope "+ x +" opened");
     }
 
     @Override
     public void closeScope() {
         if (scopes.size() <= 1) {
-            throw new RuntimeException("Cannot close the outer scope.");
+            throw new RuntimeException("Cannot close the outermost scope.");
         }
-        int x = scopes.size();
-        System.out.println("scope " + x + " closed");
+//        int x = scopeStack.size();
+//        System.out.println("scope "+ x +" closed");
         scopes.pop();
     }
 
@@ -34,12 +41,11 @@ public class NaturalSymbolTable implements SymbolTable<ParseTree> {
     public boolean put(String id, ParseTree rec) {
         Map<String, ParseTree> currentScope = scopes.peek();
         if (currentScope.containsKey(id)) {
-            return false; // Identifier already declared in this scope
+            return false; // Variable already declared in the current scope
         }
-        int x = scopes.size();
         currentScope.put(id, rec);
-        System.out.println("scope " + x + " opened");
-        System.out.println(scopes);
+        nameProperty.put(rec, id); // Store the name attribute for the parse tree node
+//        System.out.println("Current scope contains:" + scopeStack);
         return true;
     }
 
@@ -51,6 +57,10 @@ public class NaturalSymbolTable implements SymbolTable<ParseTree> {
                 return scope.get(id);
             }
         }
-        return null; // Identifier not found in any scope
+        return null; // Variable not found in any scope
+    }
+
+    public String getName(ParseTree node) {
+        return nameProperty.get(node); // Retrieve the name attribute for the parse tree node
     }
 }

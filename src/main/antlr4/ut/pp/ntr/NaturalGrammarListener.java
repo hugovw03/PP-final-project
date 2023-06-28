@@ -2,20 +2,31 @@ package main.antlr4.ut.pp.ntr;
 
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.Objects;
 
 public class NaturalGrammarListener extends NaturalBaseListener {
     private SymbolTable<ParseTree> symbolTable = new NaturalSymbolTable();
+    private ParseTreeProperty<String> nameProperty = new ParseTreeProperty<>();
 
 
     @Override
     public void enterDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx) {
         String identifier = ctx.ID().getText();
+        //if such a var assigned to a value
+        if (ctx.ASSIGN() != null) {
+            //TODO: assign value
+            System.out.println("enterGlobal: var is assigned to : " + ctx.expr());
+
+        }
+        else {
+            //TODO: directly put into symbol table
+            System.out.println("enterGlobal: var is not assigned to any value");
+        }
         symbolTable.put(identifier, ctx);
+        nameProperty.put(ctx, identifier); // Store the name attribute for the parse tree node
     }
 
     @Override
@@ -23,11 +34,35 @@ public class NaturalGrammarListener extends NaturalBaseListener {
 
     }
 
+
+    @Override
+    public void enterConstExpr(NaturalParser.ConstExprContext ctx) {
+        System.out.println("enterConstExpr is triggered, ctx is: " + ctx);
+    }
+
+    @Override
+    public void exitConstExpr(NaturalParser.ConstExprContext ctx) {
+        System.out.println("exitConstExpr is triggered, ctx is: " + ctx.getText());
+
+    }
+
+
+    //obviously IdExpr is never triggered
+    @Override
+    public void enterIdExpr(NaturalParser.IdExprContext ctx) {
+        System.out.println("enterIdExpr is triggered, ctx is: " + ctx.ID());
+    }
+
+    @Override
+    public void exitIdExpr(NaturalParser.IdExprContext ctx) {
+        System.out.println("exitIdExpr is triggered, ctx is: " + ctx.ID());
+    }
+
     @Override
     public void enterDeclNormal(NaturalParser.DeclNormalContext ctx) {
         String identifier = ctx.ID().getText();
         symbolTable.put(identifier, ctx);
-        System.out.println(symbolTable);
+        nameProperty.put(ctx, identifier); // Store the name attribute for the parse tree node
     }
 
     @Override
@@ -36,14 +71,23 @@ public class NaturalGrammarListener extends NaturalBaseListener {
     }
 
     @Override
-    public void exitAssignToVar(NaturalParser.AssignToVarContext ctx) {
+    public void enterAssignToVar(NaturalParser.AssignToVarContext ctx) {
         String identifier = ctx.ID().getText();
-        if (symbolTable.get(identifier) != null) {
+        ParseTree expr = ctx.expr();
+
+        // Evaluate the expression to get the resulting value
+//        Object value = evaluateExpression(expr);
+        System.out.println(ctx.expr());
+    }
+
+    @Override
+    public void exitAssignToVar(NaturalParser.AssignToVarContext ctx) {
+        String identifier = nameProperty.get(ctx.ID()); // Retrieve the name attribute for the ID parse tree node
+        if (symbolTable.get(identifier) == null) {
             System.out.println("Error: Variable '" + identifier + "' is not declared in the current scope.");
         }
     }
 
-    // Implement other exit methods for the remaining grammar rules
 
     @Override
     public void visitTerminal(TerminalNode node) {
@@ -70,14 +114,51 @@ public class NaturalGrammarListener extends NaturalBaseListener {
 }
 
 
+//TODO:  something we might need
+
+//    @Override
+//    public void exitAssignToVar(NaturalParser.AssignToVarContext ctx) {
+//        String identifier = ctx.ID().getText();
+//        NaturalParser.ExprContext exprContext = ctx.expr();
+//
+//        TypeKind identifierType = typeMap.get(ctx);
+//        TypeKind exprType = typeMap.get(exprContext);
+//
+//        if (identifierType != exprType) {
+//            System.out.println("Error: Type mismatch. Cannot assign expression of type " +
+//                    exprType + " to variable of type " + identifierType);
+//        } else {
+//            Object exprValue = valueMap.get(exprContext);
+//            valueMap.put(ctx, exprValue);
+//            System.out.println("Assigned: " + identifier + " = " + exprValue);
+//        }
+//        System.out.println(getTypeMap());
+//        System.out.println(getValueMap());
+//    }
+//
+//    private ParseTreeProperty<TypeKind> typeMap;
+//    private ParseTreeProperty<Object> valueMap;
+//
+//    public NaturalGrammarListener() {
+//        typeMap = new ParseTreeProperty<>();
+//        valueMap = new ParseTreeProperty<>();
+//    }
+//
+//
+//    // Implement other listener methods for attribute evaluation
+//
+//    public ParseTreeProperty<TypeKind> getTypeMap() {
+//        return typeMap;
+//    }
+//
+//    public ParseTreeProperty<Object> getValueMap() {
+//        return valueMap;
+//    }
+//
 
 
 
-
-
-
-
-
+//old code
 //public class NaturalGrammarListener extends NaturalBaseListener {
 //
 //    private Result result;

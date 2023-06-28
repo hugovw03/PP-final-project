@@ -9,7 +9,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class SymbolTableExample {
     public static void main(String[] args) {
         // Create a lexer and parser for your Natural language
-        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString("Int b = 15;\n{\nBool b = true;\na = 5; {a = 100;}}"));
+        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString("    Global Bool a ;     Global Int b = 15;"));
+//        "\n{\nBool b = true;\na = 5; {a = 100;}}"
         NaturalParser parser = new NaturalParser(new CommonTokenStream(lexer));
 
         // Obtain the parse tree by invoking the entry rule of your parser
