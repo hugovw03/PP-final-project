@@ -12,7 +12,7 @@ public class SymbolTableExample {
         NaturalLexer lexer = new NaturalLexer(CharStreams.fromString("Int a = 5;\n" +
                 "Int b;\n" +
                 "b = a * 11;" +
-                "a = b + 10; Bool c = False; Int d; If (a IsBiggerThan b) {} If (a IsBiggerThanOrEqualTo b) {} If (!c) {} If (!d) {}"));
+                "a = b + 10; Bool c = False; Bool d; If (a IsBiggerThan b) {} If (a IsBiggerThanOrEqualTo b) {} If (!c) {a = 100;} If (!d) {}"));
 //        "\n{\nBool b = true;\na = 5; {a = 100;}}"
         NaturalParser parser = new NaturalParser(new CommonTokenStream(lexer));
 

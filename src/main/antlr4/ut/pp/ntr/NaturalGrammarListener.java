@@ -164,9 +164,11 @@ public class NaturalGrammarListener extends NaturalBaseListener {
             setType(ctx, null);
             return;
         }
+        ParseTree leftExpr = ctx.expr(0);
+        ParseTree rightExpr = ctx.expr(1);
         // Check the types of the operands
-        Type leftType = getType(ctx.expr(0));
-        Type rightType = getType(ctx.expr(1));
+        Type leftType = getType(leftExpr);
+        Type rightType = getType(rightExpr);
 
         if (leftType == null || rightType == null) {
             // One or both operands have missing types
@@ -182,6 +184,7 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         }
         // Set the type of the comparison expression to 'Bool'
         setType(ctx, Type.BOOL);
+
     }
 
     //helper func for compExpr
@@ -209,6 +212,29 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         // Set the type of the negation expression to Bool
         setType(ctx, Type.BOOL);
     }
+
+    @Override
+    public void exitIfStat(NaturalParser.IfStatContext ctx) {
+        ParseTree expr = ctx.expr();
+        ParseTree ifStat = ctx.stat(0);
+        ParseTree elseStat = ctx.stat(1);
+
+        // Check the type of the condition expression
+        Type exprType = getType(expr);
+
+        if (exprType == null) {
+            // Condition expression has missing type
+            addError(ctx, "Missing type for condition expression");
+            return;
+        }
+
+        // Check if the condition expression is of type Bool
+        if (exprType != Type.BOOL) {
+            addError(ctx, "Condition expression must be of type 'Bool'");
+            return;
+        }
+    }
+
 
     /** Indicates if any errors were encountered in
      * this tree listener. */

@@ -18,6 +18,7 @@ public class NaturalSymbolTable {
     /** Adds a next deeper scope level. */
     public void openScope() {
         this.scopes.push(new Scope());
+        System.out.println("scope opened");
     }
 
     /** Removes the deepest scope level.
