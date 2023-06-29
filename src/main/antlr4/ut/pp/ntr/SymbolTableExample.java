@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class SymbolTableExample {
     public static void main(String[] args) {
         // Create a lexer and parser for your Natural language
-        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString("    Global Bool a ;     Global Int b = 15;"));
+        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString("  Bool a ;    Int b = 15; {Int c = 20;}"));
 //        "\n{\nBool b = true;\na = 5; {a = 100;}}"
         NaturalParser parser = new NaturalParser(new CommonTokenStream(lexer));
 
@@ -17,7 +17,7 @@ public class SymbolTableExample {
         ParseTree tree = parser.program();
 
         // Create an instance of NaturalSymbolTable
-        SymbolTable<ParseTree> symbolTable = new NaturalSymbolTable();
+        SymbolTable symbolTable = new NaturalSymbolTable();
 
         // Create a listener for traversing the parse tree
         NaturalListener listener = new NaturalGrammarListener() ;

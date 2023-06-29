@@ -4,13 +4,13 @@ package main.antlr4.ut.pp.ntr;
  * A newly constructed {@link SymbolTable} should consist of a single
  * (outer) scope.
  */
-public interface SymbolTable<R> {
+public interface SymbolTable {
     /** Adds (pushes) a next scope level. */
     public void openScope();
     /** Removes (pops) the top scope level. */
     public void closeScope();
     /** Declares a given ID in the top scope. */
-    public boolean put(String id, R rec);
+    public boolean put(String id, Type type);
     /** Looks up the declaration of a given ID. */
-    public R get(String id);
+    public Type get(String id);
 }

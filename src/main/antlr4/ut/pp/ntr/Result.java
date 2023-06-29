@@ -11,7 +11,7 @@ public class Result {
      * subtree that is their entry in the control flow graph. */
     private final ParseTreeProperty<ParserRuleContext> entries = new ParseTreeProperty<>();
     /** Mapping from expressions to types. */
-    private final ParseTreeProperty<NaturalType> types = new ParseTreeProperty<>();
+    private final ParseTreeProperty<Type> types = new ParseTreeProperty<>();
     /** Mapping from variables to coordinates. */
     private final ParseTreeProperty<Integer> offsets = new ParseTreeProperty<>();
 
@@ -41,14 +41,13 @@ public class Result {
 
     /** Adds an association from a parse tree expression, type,
      * or assignment target node to the corresponding (inferred) type. */
-    public void setType(ParseTree node, NaturalType type) {
+    public void setType(ParseTree node, Type type) {
         this.types.put(node, type);
     }
 
     /** Returns the type associated with a given parse tree node. */
-    public NaturalType getType(ParseTree node) {
+    public Type getType(ParseTree node) {
         return this.types.get(node);
     }
 }
-
 
