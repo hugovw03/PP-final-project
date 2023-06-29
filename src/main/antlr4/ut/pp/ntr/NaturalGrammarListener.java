@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.v4.runtime.tree.TerminalNode;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,11 +186,6 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         setType(ctx, Type.BOOL);
 
     }
-
-
-
-
-
     //helper func for compExpr
     private boolean areCompatibleForComparison(Type leftType, Type rightType) {
         // Check if the types are compatible for comparison
@@ -220,8 +215,6 @@ public class NaturalGrammarListener extends NaturalBaseListener {
     @Override
     public void exitIfStat(NaturalParser.IfStatContext ctx) {
         ParseTree expr = ctx.expr();
-        ParseTree ifStat = ctx.stat(0);
-        ParseTree elseStat = ctx.stat(1);
 
         // Check the type of the condition expression
         Type exprType = getType(expr);
@@ -243,7 +236,6 @@ public class NaturalGrammarListener extends NaturalBaseListener {
      */
     public void exitWhileStat(NaturalParser.WhileStatContext ctx) {
         ParseTree expr = ctx.expr();
-        ParseTree stat = ctx.stat();
 
         // Check the type of the condition expression
         Type exprType = getType(expr);
@@ -278,14 +270,7 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         }
     }
 
-
-
-
-
-
-
-
-
+    //TODO: type-Checking Lock, global, local
 
 
     /** Indicates if any errors were encountered in
