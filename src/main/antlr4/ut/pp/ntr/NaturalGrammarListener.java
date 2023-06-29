@@ -187,6 +187,10 @@ public class NaturalGrammarListener extends NaturalBaseListener {
 
     }
 
+
+
+
+
     //helper func for compExpr
     private boolean areCompatibleForComparison(Type leftType, Type rightType) {
         // Check if the types are compatible for comparison
@@ -231,9 +235,57 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         // Check if the condition expression is of type Bool
         if (exprType != Type.BOOL) {
             addError(ctx, "Condition expression must be of type 'Bool'");
-            return;
         }
     }
+
+    /*
+            While, If, RunInParallel
+     */
+    public void exitWhileStat(NaturalParser.WhileStatContext ctx) {
+        ParseTree expr = ctx.expr();
+        ParseTree stat = ctx.stat();
+
+        // Check the type of the condition expression
+        Type exprType = getType(expr);
+
+        if (exprType == null) {
+            // Condition expression has missing type
+            addError(ctx, "Missing type for condition expression");
+            return;
+        }
+
+        // Check if the condition expression is of type Bool
+        if (exprType != Type.BOOL) {
+            addError(ctx, "Condition expression must be of type 'Bool'");
+        }
+    }
+    @Override
+    public void exitParallelStat(NaturalParser.ParallelStatContext ctx) {
+        ParseTree expr = ctx.expr();
+
+        // Check the type of the thread count expression
+        Type exprType = getType(expr);
+
+        if (exprType == null) {
+            // Thread count expression has missing type
+            addError(ctx, "Missing type for thread count expression");
+            return;
+        }
+
+        // Check if the thread count expression is of type Int
+        if (exprType != Type.INT) {
+            addError(ctx, "Thread count expression must be of type 'Int'");
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 
     /** Indicates if any errors were encountered in
