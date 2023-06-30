@@ -18,7 +18,7 @@ expr: expr DOT ID                               #fieldExpr
     | expr (PLUS | MINUS) expr                  #addExpr
     | expr TIMES expr                           #multExpr
     | expr (LT | GT | EQ | NE | LET | SET) expr #compExpr
-    | LPAR expr LPAR                            #parExpr
+    | LPAR expr RPAR                            #parExpr
     | (NUM | TRUE | FALSE)                      #constExpr
     | ID                                        #idExpr
     ;
