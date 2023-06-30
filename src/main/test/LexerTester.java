@@ -64,7 +64,7 @@ public class LexerTester {
      */
     public void wrong(String text) {
         try {
-            scan(text);
+            scan(text); // if it fails to scan, LexerException is caught
             Assert.fail(String.format(
                     "'%s' should have been rejected but wasn't", text));
         } catch (LexerException e) {
