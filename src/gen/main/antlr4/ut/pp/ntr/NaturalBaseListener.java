@@ -125,6 +125,18 @@ public class NaturalBaseListener implements NaturalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLockStat(NaturalParser.LockStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLockStat(NaturalParser.LockStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterParExpr(NaturalParser.ParExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -185,18 +197,6 @@ public class NaturalBaseListener implements NaturalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFieldExpr(NaturalParser.FieldExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFieldExpr(NaturalParser.FieldExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterConstExpr(NaturalParser.ConstExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -216,6 +216,18 @@ public class NaturalBaseListener implements NaturalListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIdExpr(NaturalParser.IdExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOp(NaturalParser.OpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOp(NaturalParser.OpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

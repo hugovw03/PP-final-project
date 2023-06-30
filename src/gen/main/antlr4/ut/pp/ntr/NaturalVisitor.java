@@ -73,6 +73,13 @@ public interface NaturalVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrintStat(NaturalParser.PrintStatContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code lockStat}
+	 * labeled alternative in {@link NaturalParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLockStat(NaturalParser.LockStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code parExpr}
 	 * labeled alternative in {@link NaturalParser#expr}.
 	 * @param ctx the parse tree
@@ -108,13 +115,6 @@ public interface NaturalVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultExpr(NaturalParser.MultExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code fieldExpr}
-	 * labeled alternative in {@link NaturalParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFieldExpr(NaturalParser.FieldExprContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code constExpr}
 	 * labeled alternative in {@link NaturalParser#expr}.
 	 * @param ctx the parse tree
@@ -128,6 +128,12 @@ public interface NaturalVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIdExpr(NaturalParser.IdExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link NaturalParser#op}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOp(NaturalParser.OpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link NaturalParser#decl}.
 	 * @param ctx the parse tree

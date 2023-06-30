@@ -114,6 +114,18 @@ public interface NaturalListener extends ParseTreeListener {
 	 */
 	void exitPrintStat(NaturalParser.PrintStatContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code lockStat}
+	 * labeled alternative in {@link NaturalParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterLockStat(NaturalParser.LockStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lockStat}
+	 * labeled alternative in {@link NaturalParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitLockStat(NaturalParser.LockStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code parExpr}
 	 * labeled alternative in {@link NaturalParser#expr}.
 	 * @param ctx the parse tree
@@ -174,18 +186,6 @@ public interface NaturalListener extends ParseTreeListener {
 	 */
 	void exitMultExpr(NaturalParser.MultExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code fieldExpr}
-	 * labeled alternative in {@link NaturalParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterFieldExpr(NaturalParser.FieldExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code fieldExpr}
-	 * labeled alternative in {@link NaturalParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitFieldExpr(NaturalParser.FieldExprContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code constExpr}
 	 * labeled alternative in {@link NaturalParser#expr}.
 	 * @param ctx the parse tree
@@ -209,6 +209,16 @@ public interface NaturalListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIdExpr(NaturalParser.IdExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link NaturalParser#op}.
+	 * @param ctx the parse tree
+	 */
+	void enterOp(NaturalParser.OpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link NaturalParser#op}.
+	 * @param ctx the parse tree
+	 */
+	void exitOp(NaturalParser.OpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link NaturalParser#decl}.
 	 * @param ctx the parse tree

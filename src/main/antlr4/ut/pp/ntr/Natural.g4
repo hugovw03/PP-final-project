@@ -23,6 +23,7 @@ expr: expr DOT ID                               #fieldExpr
     | ID                                        #idExpr
     ;
 
+op: PLUS | MINUS;
 decl: GLOBAL | LOCAL;
 
 type: INT | BOOL | LOCK;

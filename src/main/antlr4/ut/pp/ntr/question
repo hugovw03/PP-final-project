@@ -1,0 +1,18 @@
+after we use the listener generate the symboltable,
+we pass it to visitor, and we play with the memory in visitor,
+generate code that can get values from local memory into
+registers by using the offset.
+
+
+building a map to monitor the status (if occupied) of registers
+
+
+
+Do we put variable values that we declare in the local
+memory when we are doing type checking (listener) or when we are doing
+code generation (visitor)?
+
+
+
+
+Int a = 5

@@ -44,7 +44,7 @@ Locking
 ------------------------------------------------------------
 -- define local or global during concurrency
 Global Lock lock;
-RunInParallel(int threadNum){
+RunInParallel(2){
     -- Parallel block
     Local Int x;
     Local Int y;
