@@ -13,10 +13,9 @@ stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobalAndLocal
     |expr DOT (LON | LOFF) SEMICOLON            #lockStat
     ;
 
-expr: expr DOT ID                               #fieldExpr
-    | NOT expr                                  #notExpr
-    | expr (PLUS | MINUS) expr                  #addExpr
+expr: NOT expr                                  #notExpr
     | expr TIMES expr                           #multExpr
+    | expr op expr                              #addExpr
     | expr (LT | GT | EQ | NE | LET | SET) expr #compExpr
     | LPAR expr RPAR                            #parExpr
     | (NUM | TRUE | FALSE)                      #constExpr
@@ -27,7 +26,6 @@ op: PLUS | MINUS;
 decl: GLOBAL | LOCAL;
 
 type: INT | BOOL | LOCK;
-
 
 //key words
 INT:    'Int';
@@ -42,6 +40,10 @@ LOCK:   'Lock';
 TRUE:   'True';
 FALSE:  'False';
 DOT:    '.';
+
+//Lock functions
+LON: 'lock';
+LOFF: 'unlock';
 
 //Comparison
 ASSIGN: '=';
