@@ -10,7 +10,7 @@ stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobalAndLocal
     | RUNPAR LPAR expr RPAR stat                #parallelStat
     | LBRAC stat* RBRAC                         #block
     | PRINT LPAR STRING RPAR SEMICOLON          #printStat
-    |expr DOT (LON | LOFF) SEMICOLON            #lockStat
+    | expr DOT (LON | LOFF) SEMICOLON           #lockStat
     ;
 
 expr: expr DOT ID                               #fieldExpr
@@ -18,7 +18,7 @@ expr: expr DOT ID                               #fieldExpr
     | expr (PLUS | MINUS) expr                  #addExpr
     | expr TIMES expr                           #multExpr
     | expr (LT | GT | EQ | NE | LET | SET) expr #compExpr
-    | LPAR expr LPAR                            #parExpr
+    | LPAR expr RPAR                            #parExpr
     | (NUM | TRUE | FALSE)                      #constExpr
     | ID                                        #idExpr
     ;
