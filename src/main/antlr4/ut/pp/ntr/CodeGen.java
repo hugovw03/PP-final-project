@@ -1,10 +1,18 @@
 package main.antlr4.ut.pp.ntr;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CodeGen extends NaturalBaseVisitor<String>{
 
     private String program;
+
+    //container for all the global vars
+    private Map<String, Integer> globalMap = new HashMap<>();
 
     public String generate(ParseTree tree) {
         this.program = "";
@@ -37,7 +45,17 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx) {
-        return super.visitDeclGlobalAndLocal(ctx);
+        int position = globalMap.size();
+        globalMap.put(ctx.ID().getText(), position);
+        visit(ctx.expr());
+        String result = "Pop regA, \n";
+        result += "WriteInstr regA (DirAddr " + position + "), \n";
+        result += "ReadInstr (DirAddr " + position + "), \n";
+        result += "Receive regB, \n";
+        result += "Compute NEq regA regB regC, \n";
+        result += "Branch regC (Rel (-4)), \n";
+        program += result;
+        return result;
     }
 
     @Override
@@ -93,25 +111,24 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     }
 
     @Override
+
     public String visitAddExpr(NaturalParser.AddExprContext ctx) {
-        visit(ctx.expr(0));
-        visit(ctx.expr(1));
+        // Generate code for the left subexpression
+        String leftResult = visit(ctx.expr(0));
+        String rightResult = visit(ctx.expr(1));
+
         String result = "Pop regB, \n";
         result += "Pop regA, \n";
+
         switch (ctx.op().getText()) {
-            case "+":
-                result += "Compute Add regA regB regA, \n";
-                break;
-            case "-":
-                result += "Compute Sub regA regB regA, \n";
-                break;
+            case "+" -> result += "Compute Add regA regB regA, \n";
+            case "-" -> result += "Compute Sub regA regB regA, \n";
         }
         result += "Push regA, \n";
-
-
         program += result;
         return result;
     }
+
 
     @Override
     public String visitCompExpr(NaturalParser.CompExprContext ctx) {
@@ -135,7 +152,18 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitConstExpr(NaturalParser.ConstExprContext ctx) {
-        return super.visitConstExpr(ctx);
+        String result;
+        String text = ctx.getText();
+        System.out.println(ctx.getText());
+        if (text.equals("Ture")){
+            result = "Load (ImmValue 1) regA,\nPush regA, \n";
+        }
+        else if (text.equals("False")) {
+            result = "Load (ImmValue 0) regA,\nPush regA, \n";
+        }
+        else result = "Load (ImmValue " + ctx.getText() + ") regA,\nPush regA, \n";
+        program += result;
+        return result;
     }
 
     @Override

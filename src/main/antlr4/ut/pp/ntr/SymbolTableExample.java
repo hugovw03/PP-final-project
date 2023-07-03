@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class SymbolTableExample {
     public static void main(String[] args) throws ParseException {
         // Create a lexer and parser for your Natural language
-        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString("Int a = 5;\n" +
+        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
                 "Int b = 1+2+3+3+4+5;\n"
 ));
 
