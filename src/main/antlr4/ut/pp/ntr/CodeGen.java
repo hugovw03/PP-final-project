@@ -135,16 +135,22 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         switch (op) {
             case "IsBiggerThan" :
                 result += "Compute Gt regA regB regA, \n";
+                break;
             case "IsSmallerThan":
                 result += "Compute Lt regA regB regA, \n";
+                break;
             case "IsEqualTo":
                 result += "Compute Equal regA regB regA, \n";
+                break;
             case "IsNotEqualTo":
                 result += "Compute NEq regA regB regA, \n";
+                break;
             case "IsBiggerThanOrEqualTo":
                 result += "Compute GtE regA regB regA, \n";
+                break;
             case "IsSmallerThanOrEqualTo":
                 result += "Compute LtE regA regB regA, \n";
+                break;
         }
         result += "Push regA, \n";
         program += result;
@@ -154,13 +160,10 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitIfStat(NaturalParser.IfStatContext ctx) {
-//        cmp (r1),(r2)    ;compare words at memory addresses pointed by registers r1 and r2
-//        blt else         ;jump to else-part if (r1) is less than (r2)
-//   ...           ;insert the main branch code here
-//        bra end_if       ;jump to end_if
-//        else:
-//   ...           ;insert the else branch code here
-//        end_if:
+        visit(ctx.expr());
+
+        visit(ctx.stat(0));
+
         return super.visitIfStat(ctx);
     }
 
@@ -222,6 +225,9 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             result = "Load (ImmValue 0) regA,\nPush regA, \n";
         }
         //Otherwise it will be Constant, type checked in listener
+        else if (text.endsWith("negative")) {
+            result = "Load (ImmValue (-"+ text.substring(0, text.length() - "negative".length())  +")) regA,\nPush regA, \n";
+        }
         else result = "Load (ImmValue " + ctx.getText() + ") regA,\nPush regA, \n";
         program += result;
         return result;

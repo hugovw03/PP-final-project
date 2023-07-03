@@ -20,8 +20,8 @@ public class NaturalParser extends Parser {
 		INT=1, BOOL=2, IF=3, ELSE=4, WHILE=5, PRINT=6, LOCAL=7, GLOBAL=8, LOCK=9, 
 		TRUE=10, FALSE=11, DOT=12, LON=13, LOFF=14, ASSIGN=15, LT=16, GT=17, EQ=18, 
 		NE=19, LET=20, SET=21, NOT=22, SEMICOLON=23, LBRAC=24, RBRAC=25, LPAR=26, 
-		RPAR=27, TIMES=28, PLUS=29, MINUS=30, RUNPAR=31, ID=32, NUM=33, STRING=34, 
-		COMMENT=35, WS=36;
+		RPAR=27, TIMES=28, PLUS=29, MINUS=30, RUNPAR=31, NEGATE=32, ID=33, NUM=34, 
+		STRING=35, COMMENT=36, WS=37;
 	public static final int
 		RULE_program = 0, RULE_stat = 1, RULE_expr = 2, RULE_op = 3, RULE_decl = 4, 
 		RULE_type = 5;
@@ -38,7 +38,7 @@ public class NaturalParser extends Parser {
 			"'Global'", "'Lock'", "'True'", "'False'", "'.'", "'lock'", "'unlock'", 
 			"'='", "'IsSmallerThan'", "'IsBiggerThan'", "'IsEqualTo'", "'IsNotEqualTo'", 
 			"'IsBiggerThanOrEqualTo'", "'IsSmallerThanOrEqualTo'", "'!'", "';'", 
-			"'{'", "'}'", "'('", "')'", "'*'", "'+'", "'-'", "'RunInParallel'"
+			"'{'", "'}'", "'('", "')'", "'*'", "'+'", "'-'", "'RunInParallel'", "'negative'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -47,8 +47,8 @@ public class NaturalParser extends Parser {
 			null, "INT", "BOOL", "IF", "ELSE", "WHILE", "PRINT", "LOCAL", "GLOBAL", 
 			"LOCK", "TRUE", "FALSE", "DOT", "LON", "LOFF", "ASSIGN", "LT", "GT", 
 			"EQ", "NE", "LET", "SET", "NOT", "SEMICOLON", "LBRAC", "RBRAC", "LPAR", 
-			"RPAR", "TIMES", "PLUS", "MINUS", "RUNPAR", "ID", "NUM", "STRING", "COMMENT", 
-			"WS"
+			"RPAR", "TIMES", "PLUS", "MINUS", "RUNPAR", "NEGATE", "ID", "NUM", "STRING", 
+			"COMMENT", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -150,7 +150,7 @@ public class NaturalParser extends Parser {
 				setState(15); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 15120469998L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 28005371886L) != 0) );
 			setState(17);
 			match(EOF);
 			}
@@ -551,7 +551,7 @@ public class NaturalParser extends Parser {
 				setState(66);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 15120469998L) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 28005371886L) != 0)) {
 					{
 					{
 					setState(63);
@@ -631,13 +631,11 @@ public class NaturalParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ParExprContext extends ExprContext {
-		public List<TerminalNode> LPAR() { return getTokens(NaturalParser.LPAR); }
-		public TerminalNode LPAR(int i) {
-			return getToken(NaturalParser.LPAR, i);
-		}
+		public TerminalNode LPAR() { return getToken(NaturalParser.LPAR, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode RPAR() { return getToken(NaturalParser.RPAR, 0); }
 		public ParExprContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -833,7 +831,7 @@ public class NaturalParser extends Parser {
 				setState(86);
 				expr(0);
 				setState(87);
-				match(LPAR);
+				match(RPAR);
 				}
 				break;
 			case TRUE:
@@ -845,7 +843,7 @@ public class NaturalParser extends Parser {
 				_prevctx = _localctx;
 				setState(89);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 8589937664L) != 0)) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 17179872256L) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				else {
@@ -1123,7 +1121,7 @@ public class NaturalParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001$s\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002\u0002"+
+		"\u0004\u0001%s\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002\u0002"+
 		"\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002\u0005"+
 		"\u0007\u0005\u0001\u0000\u0004\u0000\u000e\b\u0000\u000b\u0000\f\u0000"+
 		"\u000f\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
@@ -1143,7 +1141,7 @@ public class NaturalParser extends Parser {
 		"\u0002\u0001\u0002\u0005\u0002h\b\u0002\n\u0002\f\u0002k\t\u0002\u0001"+
 		"\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0005\u0001\u0005\u0001"+
 		"\u0005\u0000\u0001\u0004\u0006\u0000\u0002\u0004\u0006\b\n\u0000\u0006"+
-		"\u0001\u0000\r\u000e\u0002\u0000\n\u000b!!\u0001\u0000\u0010\u0015\u0001"+
+		"\u0001\u0000\r\u000e\u0002\u0000\n\u000b\"\"\u0001\u0000\u0010\u0015\u0001"+
 		"\u0000\u001d\u001e\u0001\u0000\u0007\b\u0002\u0000\u0001\u0002\t\t\u007f"+
 		"\u0000\r\u0001\u0000\u0000\u0000\u0002P\u0001\u0000\u0000\u0000\u0004"+
 		"[\u0001\u0000\u0000\u0000\u0006l\u0001\u0000\u0000\u0000\bn\u0001\u0000"+
@@ -1152,14 +1150,14 @@ public class NaturalParser extends Parser {
 		"\r\u0001\u0000\u0000\u0000\u000f\u0010\u0001\u0000\u0000\u0000\u0010\u0011"+
 		"\u0001\u0000\u0000\u0000\u0011\u0012\u0005\u0000\u0000\u0001\u0012\u0001"+
 		"\u0001\u0000\u0000\u0000\u0013\u0014\u0003\b\u0004\u0000\u0014\u0015\u0003"+
-		"\n\u0005\u0000\u0015\u0018\u0005 \u0000\u0000\u0016\u0017\u0005\u000f"+
+		"\n\u0005\u0000\u0015\u0018\u0005!\u0000\u0000\u0016\u0017\u0005\u000f"+
 		"\u0000\u0000\u0017\u0019\u0003\u0004\u0002\u0000\u0018\u0016\u0001\u0000"+
 		"\u0000\u0000\u0018\u0019\u0001\u0000\u0000\u0000\u0019\u001a\u0001\u0000"+
 		"\u0000\u0000\u001a\u001b\u0005\u0017\u0000\u0000\u001bQ\u0001\u0000\u0000"+
-		"\u0000\u001c\u001d\u0003\n\u0005\u0000\u001d \u0005 \u0000\u0000\u001e"+
+		"\u0000\u001c\u001d\u0003\n\u0005\u0000\u001d \u0005!\u0000\u0000\u001e"+
 		"\u001f\u0005\u000f\u0000\u0000\u001f!\u0003\u0004\u0002\u0000 \u001e\u0001"+
 		"\u0000\u0000\u0000 !\u0001\u0000\u0000\u0000!\"\u0001\u0000\u0000\u0000"+
-		"\"#\u0005\u0017\u0000\u0000#Q\u0001\u0000\u0000\u0000$%\u0005 \u0000\u0000"+
+		"\"#\u0005\u0017\u0000\u0000#Q\u0001\u0000\u0000\u0000$%\u0005!\u0000\u0000"+
 		"%&\u0005\u000f\u0000\u0000&\'\u0003\u0004\u0002\u0000\'(\u0005\u0017\u0000"+
 		"\u0000(Q\u0001\u0000\u0000\u0000)*\u0005\u0003\u0000\u0000*+\u0005\u001a"+
 		"\u0000\u0000+,\u0003\u0004\u0002\u0000,-\u0005\u001b\u0000\u0000-0\u0003"+
@@ -1173,7 +1171,7 @@ public class NaturalParser extends Parser {
 		"\u0001\u0000@?\u0001\u0000\u0000\u0000AD\u0001\u0000\u0000\u0000B@\u0001"+
 		"\u0000\u0000\u0000BC\u0001\u0000\u0000\u0000CE\u0001\u0000\u0000\u0000"+
 		"DB\u0001\u0000\u0000\u0000EQ\u0005\u0019\u0000\u0000FG\u0005\u0006\u0000"+
-		"\u0000GH\u0005\u001a\u0000\u0000HI\u0005\"\u0000\u0000IJ\u0005\u001b\u0000"+
+		"\u0000GH\u0005\u001a\u0000\u0000HI\u0005#\u0000\u0000IJ\u0005\u001b\u0000"+
 		"\u0000JQ\u0005\u0017\u0000\u0000KL\u0003\u0004\u0002\u0000LM\u0005\f\u0000"+
 		"\u0000MN\u0007\u0000\u0000\u0000NO\u0005\u0017\u0000\u0000OQ\u0001\u0000"+
 		"\u0000\u0000P\u0013\u0001\u0000\u0000\u0000P\u001c\u0001\u0000\u0000\u0000"+
@@ -1182,8 +1180,8 @@ public class NaturalParser extends Parser {
 		"\u0000\u0000PK\u0001\u0000\u0000\u0000Q\u0003\u0001\u0000\u0000\u0000"+
 		"RS\u0006\u0002\uffff\uffff\u0000ST\u0005\u0016\u0000\u0000T\\\u0003\u0004"+
 		"\u0002\u0007UV\u0005\u001a\u0000\u0000VW\u0003\u0004\u0002\u0000WX\u0005"+
-		"\u001a\u0000\u0000X\\\u0001\u0000\u0000\u0000Y\\\u0007\u0001\u0000\u0000"+
-		"Z\\\u0005 \u0000\u0000[R\u0001\u0000\u0000\u0000[U\u0001\u0000\u0000\u0000"+
+		"\u001b\u0000\u0000X\\\u0001\u0000\u0000\u0000Y\\\u0007\u0001\u0000\u0000"+
+		"Z\\\u0005!\u0000\u0000[R\u0001\u0000\u0000\u0000[U\u0001\u0000\u0000\u0000"+
 		"[Y\u0001\u0000\u0000\u0000[Z\u0001\u0000\u0000\u0000\\i\u0001\u0000\u0000"+
 		"\u0000]^\n\u0006\u0000\u0000^_\u0005\u001c\u0000\u0000_h\u0003\u0004\u0002"+
 		"\u0007`a\n\u0005\u0000\u0000ab\u0003\u0006\u0003\u0000bc\u0003\u0004\u0002"+

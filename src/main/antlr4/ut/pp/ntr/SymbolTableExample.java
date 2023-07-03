@@ -10,7 +10,7 @@ public class SymbolTableExample {
     public static void main(String[] args) throws ParseException {
         // Create a lexer and parser for your Natural language
         NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
-                "While(1+5 IsBiggerThan 33) {}"
+                "While(1+5 IsBiggerThan 33negative) {}"
 ));
 
 //        "a = b + 10; Bool c = False; Bool d; If (a IsBiggerThan b) {} If (a IsBiggerThanOrEqualTo b) {} If (!c) {a = 100;} If (!d) {} While (d) {} " +

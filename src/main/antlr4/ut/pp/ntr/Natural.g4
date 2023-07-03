@@ -67,12 +67,13 @@ TIMES  : '*';
 PLUS   : '+';
 MINUS  : '-';
 RUNPAR : 'RunInParallel';
+NEGATE : 'negative';
 
 fragment LETTER: [a-zA-Z];
 fragment DIGIT: [0-9];
 
 ID: LETTER (LETTER | DIGIT)*;
-NUM: DIGIT+;
+NUM:  DIGIT+ NEGATE?;
 STRING: '"' (~["\\] | '\\'.)* '"';
 
 COMMENT : '/*' .*? '*/' -> channel(HIDDEN);
