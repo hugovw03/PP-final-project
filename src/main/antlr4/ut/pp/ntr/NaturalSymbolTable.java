@@ -83,4 +83,17 @@ public class NaturalSymbolTable {
         }
         return result == null ? -1 : result;
     }
+
+    /** Tests if a given identifier is in the scope of any declaration.
+     * @return <code>true</code> if there is any enclosing scope in which
+     * the identifier is declared; <code>false</code> otherwise.
+     */
+    public boolean containInScope(String id) {
+        for (Scope scope : this.scopes) {
+            if (scope.contains(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

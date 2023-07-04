@@ -60,12 +60,22 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitIdExpr(NaturalParser.IdExprContext ctx) {
-        return super.visitIdExpr(ctx);
-    }
-
-    @Override
-    public String visitDecl(NaturalParser.DeclContext ctx) {
-        return super.visitDecl(ctx);
+        String result = "";
+        String id = ctx.ID().getText();
+        // Check if the Id is a globally defined variable
+        if (globalMap.containsKey(id)) {
+            // If it is, get it from the shared memory and push it to the stack
+            result += "readInstr " + globalMap.get(id) + " \n";
+            result += "Push regA \n";
+        // Check if it is in any enclosing scope
+        } else if (symbolTable.containInScope(id)) {
+            // If it is, load it from the local memory and push it to the stack
+            int offset = symbolTable.offset(id);
+            result += "Load (DirAddr " + offset + ") regA \n";
+            result += "Push regA \n";
+        } else {// TODO: throw some error?
+            }
+        return result;
     }
 
     @Override
@@ -75,16 +85,51 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitAssignToVar(NaturalParser.AssignToVarContext ctx) {
-        return super.visitAssignToVar(ctx);
+        visit(ctx.expr());
+        String result = "" ;
+        result += "Pop regA, \n";
+
+        int offset;
+        // Question: if we have a situation like "Int a = 10;Int b = 20;Int c = 30; {Int d = 40; a = 20;}"
+        // global table get first or symbolTable
+        // where we declare Int a in a scope and in the inner scope we redifine a, do we overwrite the original value of a or do we just create a new variable a where the value is equal to 20 instead of 10 but in the outer scope the value is still equal to 10?\
+        if (symbolTable.containInScope(ctx.ID().getText())){
+            offset = symbolTable.offset(ctx.ID().getText());
+            result += "Store regA (DirAddr " + offset + "), \n";
+        } else if (globalMap.containsKey(ctx.ID().getText())){
+            offset = globalMap.get(ctx.ID().getText());
+            result += "WriteInstr regA (DirAddr " + offset + "), \n";
+
+        }else {
+            //TODO: throw error
+        }
+        program += result;
+        return result;
     }
-
-
-
 
 
     @Override
     public String visitWhileStat(NaturalParser.WhileStatContext ctx) {
-        return super.visitWhileStat(ctx);
+        String result = "";
+        String expr = visit(ctx.expr());
+        int numLinesExpr = expr.split("\n").length;
+        String stat = visit(ctx.stat());
+        // If the while has no body
+        if (stat == null) {
+            // Do nothing
+        } else {
+            int numLinesStat = stat.split("\n").length;
+            // Pop the result of the expr
+            result += "Pop regA, \n";
+            //If its true we add the while body
+            // TODO: change the way we put a value into regA or let true be 0 and false be 1, because in the current implementation if it is true we will put value 1 into regA and we will branch over the code while we do want to execute it.
+            result += "Branch regA, (Rel " + numLinesStat + "),\n ";
+            result += stat;
+            // Because it is a while loop we jump back to checking the condition
+            result += "Jump relative " + -(numLinesStat + numLinesExpr + 2) + ",\n";
+        }
+        program += result;
+        return result;
     }
 
     @Override
@@ -104,11 +149,17 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitParExpr(NaturalParser.ParExprContext ctx) {
-        return super.visitParExpr(ctx);
+        return visit(ctx.expr());
     }
+
     @Override
     public String visitNotExpr(NaturalParser.NotExprContext ctx) {
-        return super.visitNotExpr(ctx);
+        String result = "";
+        visit(ctx.expr());
+        result += "Pop regA, \n";
+        result += "Compute Equal reg0 regA regA, \n";
+        result += "Push regA \n";
+        return result;
     }
 
 
@@ -154,6 +205,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         }
         result += "Push regA, \n";
         program += result;
+
         return result;
 
     }
@@ -161,21 +213,27 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitIfStat(NaturalParser.IfStatContext ctx) {
         visit(ctx.expr());
+        // Check if the condition is true or false
+        result += "Pop regA, \n";
+        //TODO: if statement with no else
 
-        visit(ctx.stat(0));
-
-        return super.visitIfStat(ctx);
+        // Keep track of how many instructions the else statement is
+        String input = visit(ctx.stat(1));
+        int numLines = input.split("\n").length;
+        // If the result was true, branch over the else statement. If it was false, dont branch and add the else statement code to the result
+        result += "Branch regA, (Rel " + numLines + "),\n ";
+        result += input;
+        // Keep track of how many instructions the if part is
+        input = visit(ctx.stat(0));
+        numLines = input.split("\n").length;
+        // If the statement is true we jump over this branch but if it is false we take this branch to jump over the if part so that we do not run both the else and if part
+        // TODO: find something different for regA, because with this implementation we either branch over everything or over nothing. So what we want is that if regA was 0 we take 1 and if it was 1 we take 0
+        result += "Branch regA, (Rel " + numLines + "),\n";
+        // Add the if part to the result
+        result += visit(ctx.stat(0));
+        program += result;
+        return result;
     }
-
-
-
-
-    //TODO: remove this line we don't need this but just in case
-    @Override
-    public String visitOp(NaturalParser.OpContext ctx) {
-        return super.visitOp(ctx);
-    }
-
 
     /*-------------------------------------------------
                     Binary Operation
@@ -218,7 +276,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         String result;
         String text = ctx.getText();
         //Assign Boolean to 1 if True
-        if (text.equals("Ture")){
+        if (text.equals("True")){
             result = "Load (ImmValue 1) regA,\nPush regA, \n";
         }
         else if (text.equals("False")) {
@@ -231,12 +289,5 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         else result = "Load (ImmValue " + ctx.getText() + ") regA,\nPush regA, \n";
         program += result;
         return result;
-    }
-
-
-
-    @Override
-    public String visitType(NaturalParser.TypeContext ctx) {
-        return super.visitType(ctx);
     }
 }
