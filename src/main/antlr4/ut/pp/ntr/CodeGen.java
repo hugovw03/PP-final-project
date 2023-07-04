@@ -13,6 +13,9 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     //container for all the global vars
     private Map<String, Integer> globalMap = new HashMap<>();
+    //symbol table for local vars, nested vars
+    private NaturalSymbolTable symbolTable = new NaturalSymbolTable();
+
 
     public String generate(ParseTree tree) {
         this.program = "";
@@ -46,14 +49,17 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx) {
         int position = globalMap.size();
+        if (position > 7) {
+            System.out.println("visitDeclGlobal: the global decl are too much");
+        }
         globalMap.put(ctx.ID().getText(), position);
         visit(ctx.expr());
         String result = "Pop regA, \n";
         result += "WriteInstr regA (DirAddr " + position + "), \n";
-        result += "ReadInstr (DirAddr " + position + "), \n";
-        result += "Receive regB, \n";
-        result += "Compute NEq regA regB regC, \n";
-        result += "Branch regC (Rel (-4)), \n";
+//        result += "ReadInstr (DirAddr " + position + "), \n";
+//        result += "Receive regB, \n";
+//        result += "Compute NEq regA regB regC, \n";
+//        result += "Branch regC (Rel (-4)), \n";
         program += result;
         return result;
     }
@@ -80,7 +86,31 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitDeclNormal(NaturalParser.DeclNormalContext ctx) {
-        return super.visitDeclNormal(ctx);
+        String result = "";
+        symbolTable.put(ctx.ID().getText(), getThisType(ctx.type().getText()));
+        int offset = symbolTable.offset(ctx.ID().getText());
+        if (ctx.ASSIGN().getSymbol() == null) {
+            result += "Load (ImmValue 0) regA,\n" +
+                      "Store  regA (DirAddr " + offset + "),\n";
+        }
+        else {
+            visit(ctx.expr());
+            result += "Pop regA, \n" +
+                      "Store  regA (DirAddr " + offset + "),\n";
+        }
+        program += result;
+        return result;
+    }
+
+    private Type getThisType(String type) {
+        if (type.equals("Int")) {
+            return Type.INT;
+        } else if (type.equals("Bool")) {
+            return Type.BOOL;
+        }
+        else {
+            throw new IllegalArgumentException ("getThisType: This input is not valid type");
+        }
     }
 
     @Override
@@ -139,7 +169,14 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitBlock(NaturalParser.BlockContext ctx) {
-        return super.visitBlock(ctx);
+        String result = "";
+        this.symbolTable.openScope();
+        int size = ctx.stat().size();
+        for (int i = 0; i < size; i++) {
+            visit(ctx.stat(i));
+        }
+        this.symbolTable.closeScope();
+        return "1";
     }
 
     @Override
@@ -180,8 +217,10 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitCompExpr(NaturalParser.CompExprContext ctx) {
         String result = "Pop regB, \nPop regA, \n";
-        visit(ctx.expr(0));
+
+        String left = visit(ctx.expr(0));
         visit(ctx.expr(1));
+        System.out.println(left);
         String op = ctx.getChild(1).getText();
         switch (op) {
             case "IsBiggerThan" :
@@ -212,6 +251,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitIfStat(NaturalParser.IfStatContext ctx) {
+        String result= "";
         visit(ctx.expr());
         // Check if the condition is true or false
         result += "Pop regA, \n";

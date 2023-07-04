@@ -23,7 +23,7 @@ expr: NOT expr                                  #notExpr
     ;
 
 op: PLUS | MINUS;
-decl: GLOBAL | LOCAL;
+decl: GLOBAL;
 
 type: INT | BOOL | LOCK;
 

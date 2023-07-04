@@ -10,8 +10,16 @@ public class SymbolTableExample {
     public static void main(String[] args) throws ParseException {
         // Create a lexer and parser for your Natural language
         NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
-                "While(1+5 IsBiggerThan 33negative) {}"
+                "Int a = 10;Int b = 20;\n" +
+                        "If (a IsBiggerThan b) {\n" +
+                        " a = 100;\n" +
+                        " }\n" +
+                        " Else {b = 100;}"
 ));
+
+//        good test for symboltable
+//        Int a = 10;Int b = 20;Int c = 30; {Int d = 40; a = 20; Int c = 50; c = 77;} c = 99;
+
 
 //        "a = b + 10; Bool c = False; Bool d; If (a IsBiggerThan b) {} If (a IsBiggerThanOrEqualTo b) {} If (!c) {a = 100;} If (!d) {} While (d) {} " +
 //                "RunInParallel(b){\n" +

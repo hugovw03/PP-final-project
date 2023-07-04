@@ -15,9 +15,10 @@ public class Scope {
     private final Map<String, Integer> offsets;
 
     /** Constructs a fresh, initially empty scope. */
-    public Scope() {
+    public Scope(int size) {
         this.types = new LinkedHashMap<>();
         this.offsets = new LinkedHashMap<>();
+        this.size += size;
     }
 
     /** Tests if a given identifier is declared in this scope. */
@@ -53,5 +54,14 @@ public class Scope {
      */
     public Integer offset(String id) {
         return this.offsets.get(id);
+    }
+
+
+    public Integer getSize() {
+        return this.offsets.size();
+    }
+
+    public void setSize(int size) {
+        this.size = this.size - size;
     }
 }

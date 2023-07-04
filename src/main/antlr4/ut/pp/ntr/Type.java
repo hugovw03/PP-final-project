@@ -28,7 +28,7 @@ abstract public class Type {
 
         @Override
         public int size() {
-            return -2;
+            return 1;
         }
 
         @Override
@@ -45,7 +45,7 @@ abstract public class Type {
 
         @Override
         public int size() {
-            return -1;
+            return 1;
         }
 
         @Override
