@@ -76,16 +76,17 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         // Check if the Id is a globally defined variable
         if (globalMap.containsKey(id)) {
             // If it is, get it from the shared memory and push it to the stack
-            result += "readInstr " + globalMap.get(id) + " \n";
-            result += "Push regA \n";
+            result += "readInstr " + globalMap.get(id) + ", \n";
+            result += "Push regA, \n";
         // Check if it is in any enclosing scope
         } else if (symbolTable.containInScope(id)) {
             // If it is, load it from the local memory and push it to the stack
             int offset = symbolTable.offset(id);
-            result += "Load (DirAddr " + offset + ") regA \n";
+            result += "Load (DirAddr " + offset + ") regA, \n";
             result += "Push regA \n";
         } else {// TODO: throw some error?
             }
+//        program += result;
         return result;
     }
 
@@ -99,7 +100,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
                       "Store  regA (DirAddr " + offset + "),\n";
         }
         else {
-            visit(ctx.expr());
+            result += visit(ctx.expr());
             result += "Pop regA, \n" +
                       "Store  regA (DirAddr " + offset + "),\n";
         }
@@ -137,7 +138,8 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         }else {
             //TODO: throw error
         }
-        program += result;
+        result += "Push regA,\n";
+//        program += result;
         return result;
     }
 
@@ -171,16 +173,17 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         return super.visitParallelStat(ctx);
     }
 
+    //visit every stat in this block
     @Override
     public String visitBlock(NaturalParser.BlockContext ctx) {
         String result = "";
         this.symbolTable.openScope();
-        int size = ctx.stat().size();
-        for (int i = 0; i < size; i++) {
-            visit(ctx.stat(i));
+        for (NaturalParser.StatContext statContext : ctx.stat()) {
+            result += visit(statContext);
         }
         this.symbolTable.closeScope();
-        return "1";
+
+        return result;
     }
 
     @Override
@@ -260,29 +263,43 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     }
 
+    //TODO: both statement is triggered
     @Override
     public String visitIfStat(NaturalParser.IfStatContext ctx) {
-        String result= "";
-        visit(ctx.expr());
+        String result= visit(ctx.expr());
+
         // Check if the condition is true or false
         result += "Pop regA, \n";
         //TODO: if statement with no else
-
         // Keep track of how many instructions the else statement is
-        String input = visit(ctx.stat(1));
-        int numLines = input.split("\n").length;
+        String leftInput = visit(ctx.stat(0));
+        System.out.println("left: " + leftInput);
+        String rightInput = visit(ctx.stat(1));
+        System.out.println("right: " + rightInput);
+
+
+        //visit compare at last to make sure the rA contains the boolean
+
+
+        //set the pointer to the next instruction +1
+        int trueCase  = leftInput.split("\n").length + 1;
+        //skip the jump instruction +1
+        int falseCase = rightInput.split("\n").length + 2;
+
+        // Branch -> Else -> Jump -> True stat
         // If the result was true, branch over the else statement. If it was false, dont branch and add the else statement code to the result
-        result += "Branch regA, (Rel " + numLines + "),\n ";
-        result += input;
-        // Keep track of how many instructions the if part is
-        input = visit(ctx.stat(0));
-        numLines = input.split("\n").length;
-        // If the statement is true we jump over this branch but if it is false we take this branch to jump over the if part so that we do not run both the else and if part
-        // TODO: find something different for regA, because with this implementation we either branch over everything or over nothing. So what we want is that if regA was 0 we take 1 and if it was 1 we take 0
-        result += "Branch regA, (Rel " + numLines + "),\n";
-        // Add the if part to the result
-        result += visit(ctx.stat(0));
-        program += result;
+        result += "Branch regA (Rel " + falseCase + "),\n ";
+
+        //add Else part
+        result += rightInput;
+
+        //if false, the true part is skipped
+        result += "Jump (Rel" + trueCase + "),";
+
+        //True part, which can only be triggered by branch -> true
+        result += leftInput;
+
+//        program += result;
         return result;
     }
 

@@ -11,14 +11,17 @@ public class SymbolTableExample {
         // Create a lexer and parser for your Natural language
         NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
                 "Int a = 10;Int b = 20;\n" +
-                        "If (a IsBiggerThan b) {\n" +
+                        "If (a+5 IsBiggerThan b-10) {\n" +
                         " a = 100;\n" +
                         " }\n" +
-                        " Else {b = 100;}"
+                        " Else {b = 200;}"
 ));
+//        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
+//        "Int a = 10;Int b = 20;Int c = 30; {Int d = 40; a = 20; Int c = 50; c = 77;} c = 99;"
+//
+//        ));
 
 //        good test for symboltable
-//        Int a = 10;Int b = 20;Int c = 30; {Int d = 40; a = 20; Int c = 50; c = 77;} c = 99;
 
 
 //        "a = b + 10; Bool c = False; Bool d; If (a IsBiggerThan b) {} If (a IsBiggerThanOrEqualTo b) {} If (!c) {a = 100;} If (!d) {} While (d) {} " +
