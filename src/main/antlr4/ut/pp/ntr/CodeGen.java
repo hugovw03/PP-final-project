@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.util.HashMap;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class CodeGen extends NaturalBaseVisitor<String>{
 
@@ -157,17 +158,24 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     }
 
     @Override
-    public String visitDeclGlobalAndLocal(NaturalParser.DeclGlobalAndLocalContext ctx) {
+    public String visitDeclGlobal(NaturalParser.DeclGlobalContext ctx) {
         String result = "";
         int position = globalMap.size();
         if (position > 7) {
             System.out.println("visitDeclGlobal: share memory overflow");
         }
+        //if it's a lock
+        if (ctx.type().getText().equals("Lock")){
+            //the global memory is taken and set to 0
+            globalMap.put(ctx.ID().getText(), position);
+        }
+        else {
         //put global id into shareMemory map
         globalMap.put(ctx.ID().getText(), position);
         visit(ctx.expr());
         result += "Pop regA, \n"
                 + "WriteInstr regA (DirAddr " + position + "), \n";
+        }
 //        result += "ReadInstr (DirAddr " + position + "), \n";
 //        result += "Receive regB, \n";
 //        result += "Compute NEq regA regB regC, \n";
@@ -182,6 +190,8 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             return Type.INT;
         } else if (type.equals("Bool")) {
             return Type.BOOL;
+        } else if (type.equals("Lock")) {
+            throw new IllegalArgumentException ("getThisType: The lock must be declare as Global");
         }
         else {
             throw new IllegalArgumentException ("getThisType: This input is not valid type");
@@ -346,12 +356,26 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitLockStat(NaturalParser.LockStatContext ctx) {
-        return super.visitLockStat(ctx);
-    }
-
-    @Override
-    public String visitParExpr(NaturalParser.ParExprContext ctx) {
-        return visit(ctx.expr());
+        String result = "";
+        // Get the id of the lock
+        String id = ctx.expr().getText();
+        // get the address of the lock
+        int address = globalMap.get(id);
+        // If we want to lock the lock
+        if (Objects.equals(ctx.lockStatus().getText(), "lock")) {
+            // We check what is in the shared memory. If we get a 1 from the shared memory,
+            // we loop back and keep checking it until it is set to 0.
+            // If it is 0 we set it to 1 and continue with the code
+            result += "TestAndSet (DirAddr " + address + "), \n";
+            result += "Receive regA, \n";
+            result += "Compute Equal reg0 regA regA,\n";
+            result += "Branch regA (Rel (-3)), \n";
+            result += "Load (ImmValue 1) regA, \n";
+            result += "WriteInstr regA (DirAddr " + address + "), \n";
+        } else {
+            result += "WriteInstr reg0 (DirAddr " + address + "), \n";
+        }
+        return result;
     }
 
     @Override

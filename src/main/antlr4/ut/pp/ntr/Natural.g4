@@ -2,7 +2,7 @@ grammar Natural;
 
 program: stat+ EOF;
 
-stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobalAndLocal
+stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobal
     | type ID (ASSIGN expr)? SEMICOLON          #declNormal
     | ID ASSIGN expr SEMICOLON                  #assignToVar
     | IF LPAR expr RPAR stat (ELSE stat)?       #ifStat
@@ -10,7 +10,7 @@ stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobalAndLocal
     | RUNPAR LPAR expr RPAR stat                #parallelStat
     | LBRAC stat* RBRAC                         #block
     | PRINT LPAR STRING RPAR SEMICOLON          #printStat
-    | expr DOT (LON | LOFF) SEMICOLON           #lockStat
+    | expr DOT lockStatus SEMICOLON             #lockStat
     ;
 
 expr: NOT expr                                  #notExpr
@@ -21,7 +21,7 @@ expr: NOT expr                                  #notExpr
     | (NUM | TRUE | FALSE)                      #constExpr
     | ID                                        #idExpr
     ;
-
+lockStatus: (LON | LOFF);
 op: PLUS | MINUS;
 decl: GLOBAL;
 
@@ -42,7 +42,7 @@ FALSE:  'False';
 DOT:    '.';
 
 //Lock functions
-LON: 'lock';
+LON:  'lock';
 LOFF: 'unlock';
 
 //Comparison

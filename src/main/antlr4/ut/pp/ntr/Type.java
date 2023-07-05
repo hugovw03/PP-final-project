@@ -5,6 +5,7 @@ abstract public class Type {
     public static final Type BOOL = new Bool();
     /** The singleton instance of the {@link Int} type. */
     public static final Type INT = new Int();
+    public static final Type LOCK = new Lock();
     private final TypeKind kind;
 
     /** Constructor for subclasses. */
@@ -53,4 +54,21 @@ abstract public class Type {
             return "Integer";
         }
     }
+
+    static public class Lock extends Type {
+        private Lock() {
+            super(TypeKind.LOCK);
+        }
+
+        @Override
+        public int size() {
+            return 1;
+        }
+
+        @Override
+        public String toString() {
+            return "Lock";
+        }
+    }
+
 }
