@@ -35,7 +35,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 //        for (int i = 0; i < totalThreads; i++) {
 //            newprog += ", prog";
 //        }
-        newProgram += "]";
+        newProgram += "EndProg\n]";
 
         return newProgram;
     }
@@ -161,10 +161,10 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             result += "Compute Equal reg0 regA regA, \n";
             //If its true we add the while body
             // TODO: change the way we put a value into regA or let true be 0 and false be 1, because in the current implementation if it is true we will put value 1 into regA and we will branch over the code while we do want to execute it.
-            result += "Branch regA, (Rel " + numLinesStat + "),\n ";
+            result += "Branch regA (Rel " + numLinesStat + "),\n ";
             result += stat;
             // Because it is a while loop we jump back to checking the condition
-            result += "Jump relative " + -(numLinesStat + numLinesExpr + 2) + ",\n";
+            result += "Jump (Rel " + "(-" + (numLinesStat + numLinesExpr + 3)  + ")),\n";
         }
 //        program += result;
         return result;

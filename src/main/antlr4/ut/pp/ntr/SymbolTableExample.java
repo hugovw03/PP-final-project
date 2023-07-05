@@ -10,11 +10,7 @@ public class SymbolTableExample {
     public static void main(String[] args) throws ParseException {
         // Create a lexer and parser for your Natural language
         NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
-                "Int a = 10;Int b = 20;\n" +
-                        "If (a+5 IsBiggerThan b-10) {\n" +
-                        " a = 100;\n" +
-                        " }\n" +
-                        " Else {b = 200;}"
+                "Int a = 10; Int b = 50; While (a IsBiggerThan 8) {a = a - 1; b = b+1;}"
 ));
 //        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
 //        "Int a = 10;Int b = 20;Int c = 30; {Int d = 40; a = 20; Int c = 50; c = 77;} c = 99;"
