@@ -201,7 +201,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         String result = visit(ctx.expr());
         result += "Pop regA, \n";
         result += "Compute Equal reg0 regA regA, \n";
-        result += "Push regA \n";
+        result += "Push regA, \n";
         return result;
     }
 
@@ -294,7 +294,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         result += rightInput;
 
         //if false, the true part is skipped
-        result += "Jump (Rel" + trueCase + "),";
+        result += "Jump (Rel " + trueCase + "),";
 
         //True part, which can only be triggered by branch -> true
         result += leftInput;
