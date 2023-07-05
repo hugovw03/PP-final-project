@@ -12,6 +12,8 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     private String program;
 
+    //container for all the locks
+    private final Map<String, Integer> lockMap = new HashMap<>();
     //container for all the global vars
     private final Map<String, Integer> globalMap = new HashMap<>();
     //symbol table for local vars, nested vars
@@ -345,6 +347,11 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         return result;
     }
 
+    @Override
+    public String visitParExpr(NaturalParser.ParExprContext ctx) {
+        return visit(ctx.expr());
+    }
+
 
     /*-------------------------------------------------
                     Concurrency
@@ -382,5 +389,4 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     public String visitParallelStat(NaturalParser.ParallelStatContext ctx) {
         return super.visitParallelStat(ctx);
     }
-
 }
