@@ -83,7 +83,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             // If it is, load it from the local memory and push it to the stack
             int offset = symbolTable.offset(id);
             result += "Load (DirAddr " + offset + ") regA, \n";
-            result += "Push regA \n";
+            result += "Push regA, \n";
         } else {// TODO: throw some error?
             }
 //        program += result;
@@ -154,9 +154,11 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         if (stat == null) {
             // Do nothing
         } else {
-            int numLinesStat = stat.split("\n").length;
+            int numLinesStat = stat.split("\n").length + 2;
+            result += expr;
             // Pop the result of the expr
             result += "Pop regA, \n";
+            result += "Compute Equal reg0 regA regA, \n";
             //If its true we add the while body
             // TODO: change the way we put a value into regA or let true be 0 and false be 1, because in the current implementation if it is true we will put value 1 into regA and we will branch over the code while we do want to execute it.
             result += "Branch regA, (Rel " + numLinesStat + "),\n ";
