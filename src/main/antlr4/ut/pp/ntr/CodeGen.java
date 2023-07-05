@@ -43,7 +43,12 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitProgram(NaturalParser.ProgramContext ctx) {
-        return super.visitProgram(ctx);
+        String result = "";
+        for (NaturalParser.StatContext statContext : ctx.stat()) {
+            result += visit(statContext);
+        }
+        program+= result;
+        return result;
     }
 
     @Override
@@ -60,7 +65,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 //        result += "Receive regB, \n";
 //        result += "Compute NEq regA regB regC, \n";
 //        result += "Branch regC (Rel (-4)), \n";
-        program += result;
+//        program += result;
         return result;
     }
 
@@ -98,7 +103,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             result += "Pop regA, \n" +
                       "Store  regA (DirAddr " + offset + "),\n";
         }
-        program += result;
+//        program += result;
         return result;
     }
 
@@ -115,8 +120,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitAssignToVar(NaturalParser.AssignToVarContext ctx) {
-        visit(ctx.expr());
-        String result = "" ;
+        String result = visit(ctx.expr()) ;
         result += "Pop regA, \n";
 
         int offset;
@@ -158,7 +162,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             // Because it is a while loop we jump back to checking the condition
             result += "Jump relative " + -(numLinesStat + numLinesExpr + 2) + ",\n";
         }
-        program += result;
+//        program += result;
         return result;
     }
 
@@ -191,8 +195,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitNotExpr(NaturalParser.NotExprContext ctx) {
-        String result = "";
-        visit(ctx.expr());
+        String result = visit(ctx.expr());
         result += "Pop regA, \n";
         result += "Compute Equal reg0 regA regA, \n";
         result += "Push regA \n";
@@ -216,11 +219,19 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitCompExpr(NaturalParser.CompExprContext ctx) {
-        String result = "Pop regB, \nPop regA, \n";
 
-        String left = visit(ctx.expr(0));
-        visit(ctx.expr(1));
-        System.out.println(left);
+        String result = visit(ctx.expr(0));
+        result += "Pop regC,\n";
+        result += visit(ctx.expr(1));
+        result += "Pop regD,\n";
+        result += "Push regC,\n Push regD,\n";
+        result += "Pop regB, \nPop regA, \n";
+
+//        String result = "Pop regB, \nPop regA, \n";
+//        String left = visit(ctx.expr(0));
+//        visit(ctx.expr(1));
+//        System.out.println(left);
+
         String op = ctx.getChild(1).getText();
         switch (op) {
             case "IsBiggerThan" :
@@ -243,7 +254,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
                 break;
         }
         result += "Push regA, \n";
-        program += result;
+//        program += result;
 
         return result;
 
@@ -281,13 +292,13 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     //Handle Multiplication
     @Override
     public String visitMultExpr(NaturalParser.MultExprContext ctx) {
-        visit(ctx.expr(0));
-        visit(ctx.expr(1));
-        String result = "Pop regB,\n" +
+        String result = visit(ctx.expr(0));
+        result += visit(ctx.expr(1));
+        result += "Pop regB,\n" +
                         "Pop regA,\n" +
                         "Compute Mul regA regB regA, \n" +
                         "Push regA, \n";
-        program += result;
+//        program += result;
         return  result;
     }
 
@@ -295,10 +306,11 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitAddExpr(NaturalParser.AddExprContext ctx) {
         // Generate code for the left&right subexpression
-        String leftResult = visit(ctx.expr(0));
-        String rightResult = visit(ctx.expr(1));
 
-        String result = "Pop regB, \n";
+
+        String result = visit(ctx.expr(0));
+        result += visit(ctx.expr(1));
+        result += "Pop regB, \n";
         result += "Pop regA, \n";
 
         switch (ctx.op().getText()) {
@@ -306,7 +318,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             case "-" -> result += "Compute Sub regA regB regA, \n";
         }
         result += "Push regA, \n";
-        program += result;
+//        program += result;
         return result;
     }
 
@@ -327,7 +339,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             result = "Load (ImmValue (-"+ text.substring(0, text.length() - "negative".length())  +")) regA,\nPush regA, \n";
         }
         else result = "Load (ImmValue " + ctx.getText() + ") regA,\nPush regA, \n";
-        program += result;
+//        program += result;
         return result;
     }
 }
