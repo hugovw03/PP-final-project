@@ -442,7 +442,11 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     -------------------------------------------------*/
     @Override
     public String visitPrintStat(NaturalParser.PrintStatContext ctx) {
-        return super.visitPrintStat(ctx);
+        String result = "";
+//        result += visit(ctx.expr());
+        result += "Pop regA, \n";
+        result += "WriteInstr regA charIO, \n";
+        return result;
     }
 
     @Override
