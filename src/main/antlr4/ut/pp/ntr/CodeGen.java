@@ -8,7 +8,8 @@ import java.util.*;
 public class CodeGen extends NaturalBaseVisitor<String>{
 
     private String program;
-    private int threadCounter;
+    private int threadPointer = 1;
+    private final List<Integer> threadCounter = new ArrayList<>();
     private final List<String> parallelCode = new ArrayList<>();
     //container for all the locks
     //TODO:?
@@ -90,6 +91,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
                 for (int j = i + 1; j < parallelCode.size(); j++) {
                     sum += (parallelCode.get(j).split("\n")).length + 5;
                 }
+
                 parallelResult += "Jump (Rel " + (sum + 1) + "), \n";
                 sum = 0;
             }
@@ -111,6 +113,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
                 for (int j = i + 1; j < parallelCode.size(); j++) {
                     something += (parallelCode.get(j).split("\n")).length + 5;
                 }
+
                 headerResult += "Branch regSprID (Rel " + (headerSum + seqLength + something) + "), \n";
                 something = 0;
             }
@@ -182,10 +185,6 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         } else if (globalMap.containsKey(ctx.ID().getText())){
             offset = globalMap.get(ctx.ID().getText());
             result += "WriteInstr regA (DirAddr " + offset + "), \n";
-            result += "ReadInstr (DirAddr " + offset + "), \n";
-            result += "Receive regB, \n";
-            result += "Compute NEq regA regB regC, \n";
-            result += "Branch regC (Rel (-4)), \n";
         }else {
             //TODO: throw error
         }
@@ -204,7 +203,8 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
             // If it is, get it from the shared memory and push it to the stack
             result += "ReadInstr (DirAddr " + globalMap.get(id) + "), \n";
-            result += "Push regA, \n";
+            result += "Receive regA, \n"
+                    + "Push regA, \n";
 
             // Check if it is in any enclosing scope
         } else if (symbolTable.containInScope(id)) {
@@ -472,11 +472,16 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitParallelStat(NaturalParser.ParallelStatContext ctx) {
         String result = "";
-        threadCounter += Integer.parseInt(ctx.expr().getText());
+        threadCounter.add(Integer.parseInt(ctx.expr().getText()));
         result += visit(ctx.stat());
         parallelCode.add(result);
 
-        return "";
+        String trigger = "";
+        for (int k = 0; k < threadCounter.get(threadCounter.size()-1); k ++) {
+             trigger += "WriteInstr regA (DirAddr "+ threadPointer + "),\n";
+            threadPointer += 1;
+        }
+        return trigger;
     }
 }
 
