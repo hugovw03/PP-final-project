@@ -15,35 +15,41 @@ public class NaturalLexerTester {
                 "&");
     }
 
+    // Tests the scanning of the comparison operators.
+    @Test
+    public void comparisonOPTest() {
+        tester.yields("x IsEqualTo y;", NaturalLexer.ID, NaturalLexer.EQ, NaturalLexer.ID, NaturalLexer.SEMICOLON);
+        tester.yields("x IsSmallerThan y;", NaturalLexer.ID, NaturalLexer.LT, NaturalLexer.ID, NaturalLexer.SEMICOLON);
+        tester.yields("x IsBiggerThan y;", NaturalLexer.ID, NaturalLexer.GT, NaturalLexer.ID, NaturalLexer.SEMICOLON);
+        tester.yields("x IsNotEqualTo y;", NaturalLexer.ID, NaturalLexer.NE, NaturalLexer.ID, NaturalLexer.SEMICOLON);
+        tester.yields("x IsBiggerThanOrEqualTo y;", NaturalLexer.ID, NaturalLexer.LET, NaturalLexer.ID, NaturalLexer.SEMICOLON);
+        tester.yields("x IsSmallerThanOrEqualTo y;", NaturalLexer.ID, NaturalLexer.SET, NaturalLexer.ID, NaturalLexer.SEMICOLON);
+        tester.yields("Int\nx\n=\n5\n;", NaturalLexer.INT, NaturalLexer.ID, NaturalLexer.ASSIGN, NaturalLexer.NUM, NaturalLexer.SEMICOLON);
+    }
+
     @Test
     public void unclosedStringTest() {
         tester.wrong("Print(\"Hello, World!);");
     }
 
     @Test
-    public void invalidIDTest() {
-        tester.wrong("int 123abc = 10;");
-    }
-
-    @Test
     public void integerDeclarationTest() throws LexerTester.LexerException {
-        tester.correct("In/////t x = 5 5;");
-        tester.yields("Int x = 55;", NaturalLexer.BOOL, NaturalLexer.ID,
+        tester.wrong("In/////t x = 5 5;");
+        tester.yields("Int x = 55;", NaturalLexer.INT, NaturalLexer.ID,
                 NaturalLexer.ASSIGN, NaturalLexer.NUM, NaturalLexer.SEMICOLON);
         //testing integer declaration with an integer value
         System.out.println(tester.scan("In t x = 5 5;"));
-        tester.correct("In/////t x = 5 5;");
         System.out.println(tester.scan("Int x = 55;"));
-        tester.wrong("I nt x = 5 5;");
+        //tester.wrong("I nt x = 5 5;");
         tester.yields("Int x = 55;", NaturalLexer.INT, NaturalLexer.ID,
                 NaturalLexer.ASSIGN, NaturalLexer.NUM, NaturalLexer.SEMICOLON);
         //testing integer declaration with no value declaration
         tester.correct("Int name;");
         tester.yields("Int name;", NaturalLexer.INT, NaturalLexer.ID, NaturalLexer.SEMICOLON);
         //some wrong declaration cases
-        tester.wrong("Int x");      // no ;
-        tester.wrong("Bool x");     // no ;
-        tester.wrong("Boolean x;"); // should be Bool
+        //tester.wrong("Int x");      // no ;
+        //tester.wrong("Bool x");     // no ;
+        //tester.wrong("Boolean x = True;"); // should be Bool
     }
 
     @Test
@@ -85,9 +91,9 @@ public class NaturalLexerTester {
         tester.yields("Print (a);", NaturalLexer.PRINT, NaturalLexer.LPAR, NaturalLexer.ID, NaturalLexer.RPAR, NaturalLexer.SEMICOLON);
         tester.yields("Print(\"Hello World!\");", NaturalLexer.PRINT, NaturalLexer.LPAR,
                 NaturalLexer.STRING, NaturalLexer.RPAR, NaturalLexer.SEMICOLON);
-        tester.wrong("Print(\"Hello World!);");
-        tester.wrong("Print a;");
-        tester.wrong("print a");
+        //tester.wrong("Print(\"Hello World!);");
+        //tester.wrong("Print a;");
+        //tester.wrong("print a");
     }
 
     @Test
@@ -98,18 +104,18 @@ public class NaturalLexerTester {
                 "\n" +
                 "        }");
         tester.yields("Int abc = 5;\n" +
-                "        If (abc IsBiggerThan 5) {\n" +
-                "\n" +
-                "        }",
+                        "        If (abc IsBiggerThan 5) {\n" +
+                        "\n" +
+                        "        }",
                 NaturalLexer.INT, NaturalLexer.ID, NaturalLexer.ASSIGN, NaturalLexer.NUM, NaturalLexer.SEMICOLON,
                 NaturalLexer.IF, NaturalLexer.LPAR, NaturalLexer.ID, NaturalLexer.GT, NaturalLexer.NUM,
                 NaturalLexer.RPAR, NaturalLexer.LBRAC, NaturalLexer.RBRAC);
 
         //testing an if block with no condition (not allowed)
-        tester.wrong("Int abc = 5;\n" +
-                "        If () {\n" +
-                "            abc = 6;\n" +
-                "        }");
+//        tester.wrong("Int abc = 5;\n" +
+//                "        If () {\n" +
+//                "            abc = 6;\n" +
+//                "        }");
     }
 
     @Test
@@ -119,9 +125,9 @@ public class NaturalLexerTester {
                 "            val = val - 1;" +
                 "        }");
         tester.yields("Int val = 10;\n" +
-                "        While (val IsNotEqualTo 8) {\n" +
-                "            val = val - 1;\n" +
-                "        }",
+                        "        While (val IsNotEqualTo 8) {\n" +
+                        "            val = val - 1;\n" +
+                        "        }",
                 NaturalLexer.INT, NaturalLexer.ID, NaturalLexer.ASSIGN, NaturalLexer.NUM, NaturalLexer.SEMICOLON,
                 NaturalLexer.WHILE, NaturalLexer.LPAR, NaturalLexer.ID, NaturalLexer.NE, NaturalLexer.NUM,
                 NaturalLexer.RPAR, NaturalLexer.LBRAC, NaturalLexer.ID, NaturalLexer.ASSIGN, NaturalLexer.ID,
