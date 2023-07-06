@@ -2,7 +2,7 @@ grammar Natural;
 
 program: stat+ EOF;
 
-stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobalAndLocal
+stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobal
     | type ID (ASSIGN expr)? SEMICOLON          #declNormal
     | ID ASSIGN expr SEMICOLON                  #assignToVar
     | IF LPAR expr RPAR stat (ELSE stat)?       #ifStat
@@ -10,7 +10,7 @@ stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobalAndLocal
     | RUNPAR LPAR expr RPAR stat                #parallelStat
     | LBRAC stat* RBRAC                         #block
     | PRINT LPAR STRING RPAR SEMICOLON          #printStat
-    | expr DOT (LON | LOFF) SEMICOLON           #lockStat
+    | expr DOT lockStatus SEMICOLON             #lockStat
     ;
 
 expr: NOT expr                                  #notExpr
@@ -21,9 +21,9 @@ expr: NOT expr                                  #notExpr
     | (NUM | TRUE | FALSE)                      #constExpr
     | ID                                        #idExpr
     ;
-
+lockStatus: (LON | LOFF);
 op: PLUS | MINUS;
-decl: GLOBAL | LOCAL;
+decl: GLOBAL;
 
 type: INT | BOOL | LOCK;
 
@@ -42,7 +42,7 @@ FALSE:  'False';
 DOT:    '.';
 
 //Lock functions
-LON: 'lock';
+LON:  'lock';
 LOFF: 'unlock';
 
 //Comparison
@@ -67,12 +67,13 @@ TIMES  : '*';
 PLUS   : '+';
 MINUS  : '-';
 RUNPAR : 'RunInParallel';
+NEGATE : 'negative';
 
 fragment LETTER: [a-zA-Z];
 fragment DIGIT: [0-9];
 
 ID: LETTER (LETTER | DIGIT)*;
-NUM: DIGIT+;
+NUM:  DIGIT+ NEGATE?;
 STRING: '"' (~["\\] | '\\'.)* '"';
 
 COMMENT : '/*' .*? '*/' -> channel(HIDDEN);

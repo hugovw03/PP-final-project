@@ -9,9 +9,16 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class SymbolTableExample {
     public static void main(String[] args) throws ParseException {
         // Create a lexer and parser for your Natural language
-        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString("Int a = 5;\n" +
-                "Int b = 1+2+3+3+4+5;\n"
+        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
+                "Global Lock lock1; Int a = 10; Int b = 20; If (a IsBiggerThan b) { b = 200;} Else{lock1.lock; a = a + b; lock1.unlock}"
 ));
+//        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
+//        "Int a = 10;Int b = 20;Int c = 30; {Int d = 40; a = 20; Int c = 50; c = 77;} c = 99;"
+//
+//        ));
+
+//        good test for symboltable
+
 
 //        "a = b + 10; Bool c = False; Bool d; If (a IsBiggerThan b) {} If (a IsBiggerThanOrEqualTo b) {} If (!c) {a = 100;} If (!d) {} While (d) {} " +
 //                "RunInParallel(b){\n" +
@@ -40,6 +47,7 @@ public class SymbolTableExample {
 //        ParseTree body = tree.getChild(0).getChild(2).getChild(0);
 //        ParseTree assX = body.getChild(0);
         Result g = checker.check(tree);
+        System.out.println(g);
 //        System.out.println(assX);
     }
 }

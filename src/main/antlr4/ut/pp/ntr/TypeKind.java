@@ -4,5 +4,7 @@ public enum TypeKind {
     /** Integer base type. */
     INT,
     /** Boolean base type. */
-    BOOL
+    BOOL,
+    /** Lock type. */
+    LOCK
 }

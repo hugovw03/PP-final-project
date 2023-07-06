@@ -28,6 +28,9 @@ public class NaturalGrammarListener extends NaturalBaseListener {
     @Override
     public void exitDeclNormal(NaturalParser.DeclNormalContext ctx) {
         String id = ctx.ID().toString();
+        if (ctx.type().getText().equals("LOCK")) {
+            addError(ctx, "lock has to be declared as Global, like it or not, it will be global anyway");
+        }
         if (ctx.ASSIGN() == null) {
             table.put(id, getThisType(ctx.type().getText()));
             setType(ctx, getThisType(ctx.type().getText()));
@@ -43,6 +46,9 @@ public class NaturalGrammarListener extends NaturalBaseListener {
     public void exitAssignToVar(NaturalParser.AssignToVarContext ctx) {
         String variableId = ctx.ID().getText();
         Type variableType = table.type(variableId);
+        if (variableType == Type.LOCK) {
+            addError(ctx, "assigning constant to a lock");
+        }
 
         checkType(ctx.expr(), variableType);
         setType(ctx, variableType);
@@ -59,6 +65,7 @@ public class NaturalGrammarListener extends NaturalBaseListener {
     }
 
 
+    //TODO: Add negative number rule, might need to be checked in listener
     @Override
     public void exitConstExpr(NaturalParser.ConstExprContext ctx) {
         Token constantToken = ctx.start; // Get the token representing the constant
@@ -273,6 +280,24 @@ public class NaturalGrammarListener extends NaturalBaseListener {
     //TODO: type-Checking Lock, global, local
 
 
+    @Override
+    public void exitLockStat(NaturalParser.LockStatContext ctx) {
+        super.exitLockStat(ctx);
+    }
+
+    @Override
+    public void exitDeclGlobal(NaturalParser.DeclGlobalContext ctx) {
+        String id = ctx.ID().toString();
+        if (ctx.ASSIGN() == null) {
+            table.put(id, getThisType(ctx.type().getText()));
+            setType(ctx, getThisType(ctx.type().getText()));
+            return;
+        }
+        table.put(id, getThisType(ctx.type().getText()));
+        checkType(ctx.expr(), table.type(id));
+        setType(ctx, getThisType(ctx.type().getText()));
+    }
+
     /** Indicates if any errors were encountered in
      * this tree listener. */
     public boolean hasErrors() {
@@ -356,6 +381,8 @@ public class NaturalGrammarListener extends NaturalBaseListener {
             return Type.INT;
         } else if (type.equals("Bool")) {
             return Type.BOOL;
+        }  else if (type.equals("Lock")) {
+            return Type.LOCK;
         }
         else {
             throw new IllegalArgumentException ("getThisType: This input is not valid type");

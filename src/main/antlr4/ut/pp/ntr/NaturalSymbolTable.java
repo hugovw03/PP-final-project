@@ -1,23 +1,20 @@
 package main.antlr4.ut.pp.ntr;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 public class NaturalSymbolTable {
     /** Stack of name-to-type maps. */
     private final Stack<Scope> scopes;
+    private  int counter = 0;
     /** Constructs a fresh, initially empty symbol table. */
     public NaturalSymbolTable() {
         this.scopes = new Stack<>();
-        openScope();
+        this.scopes.push(new Scope(0));
     }
     /** Adds a next deeper scope level. */
     public void openScope() {
-        this.scopes.push(new Scope());
+        counter += this.scopes.peek().getSize();
+        this.scopes.push(new Scope(counter));
         System.out.println("scope opened");
     }
 
@@ -28,7 +25,9 @@ public class NaturalSymbolTable {
         if (this.scopes.size() == 1) {
             throw new IllegalStateException("Can't close outer scope");
         }
+        int size = this.scopes.peek().getSize();
         this.scopes.pop();
+        this.scopes.peek().setSize(size);
     }
 
     /** Tries to declare a given identifier in the deepest scope level.
@@ -36,10 +35,6 @@ public class NaturalSymbolTable {
      * <code>false</code> if it was already declared in this scope.
      */
     public boolean put(String id, Type record) {
-        return this.scopes.peek().put(id, record);
-    }
-
-    public boolean globalPut(String id, Type record) {
         return this.scopes.peek().put(id, record);
     }
 
@@ -82,5 +77,18 @@ public class NaturalSymbolTable {
             result = this.scopes.get(i).offset(id);
         }
         return result == null ? -1 : result;
+    }
+
+    /** Tests if a given identifier is in the scope of any declaration.
+     * @return <code>true</code> if there is any enclosing scope in which
+     * the identifier is declared; <code>false</code> otherwise.
+     */
+    public boolean containInScope(String id) {
+        for (Scope scope : this.scopes) {
+            if (scope.contains(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
