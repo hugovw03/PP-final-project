@@ -1,0 +1,30 @@
+//should print handle vars
+// should concurrency be handled different programs
+// how can we concurrently run different programs
+// should we change our structure to concurrently run different programs
+// how do we implement the parallel part? let the ta explain how the multiplesprockle example does it
+// how do we implement the print statement?
+
+
+
+
+
+prog : program+;
+program: stat+ END;
+
+
+Global Lock lock1;
+RunInParallel (2) {
+    Int a = 10;
+    Int b = 20;
+}
+END
+
+Global Lock lock1;
+RunInParallel (2) {
+    Int a = 10;
+    Int b = 20;
+}
+END
+
+
