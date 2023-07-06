@@ -3,16 +3,15 @@ package main.antlr4.ut.pp.ntr;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 
-import java.util.HashMap;
-
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class CodeGen extends NaturalBaseVisitor<String>{
 
     private String program;
-
+    private int threadCounter;
+    private final List<String> parallelCode = new ArrayList<>();
     //container for all the locks
+    //TODO:?
     private final Map<String, Integer> lockMap = new HashMap<>();
     //container for all the global vars
     private final Map<String, Integer> globalMap = new HashMap<>();
@@ -49,12 +48,84 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitProgram(NaturalParser.ProgramContext ctx) {
         String result = "";
-        result += "Branch regSprID (Rel 6)";
+        String seqCode = "";
+        //sequential part
         for (NaturalParser.StatContext statContext : ctx.stat()) {
-            result += visit(statContext);
+            seqCode += visit(statContext);
         }
-        program+= result;
-        return result;
+        if (parallelCode.size() != 0) {
+            // get the amount of parallel blocks we want to run
+            int parallelBlocks = parallelCode.size();
+
+            result += seqCode;
+
+            ArrayList<Integer> parallelLength = new ArrayList<>();
+            //calculating the length of each parallel block
+            for (String s : parallelCode) {
+                int length = (s.split("\n")).length;
+                parallelLength.add(length);
+            }
+            int parallelTotalLength = 0;
+            // calculate the total length of the parallel block, which we will place at the bottom of the code
+            for (int i : parallelLength) {
+                parallelTotalLength += i;
+            }
+
+
+            //Let the main thread jump over the parallel part
+            result += "Jump (Rel " + (parallelTotalLength + 1 + 5 * parallelBlocks) + "), \n";
+
+
+            //The part that lets the threads loop
+            String parallelStarter = "ReadInstr (IndAddr regSprID), \n" +
+                    "Receive regA, \n" +
+                    "Compute Equal regA reg0 regB, \n" +
+                    "Branch regB (Rel (-3)), \n";
+
+            String parallelResult = "";
+            int sum = 0;
+            for (int i = 0; i < parallelCode.size(); i++) {
+                parallelResult += parallelStarter;
+                parallelResult += parallelCode.get(i);
+                for (int j = i + 1; j < parallelCode.size(); j++) {
+                    sum += (parallelCode.get(j).split("\n")).length + 5;
+                }
+                parallelResult += "Jump (Rel " + (sum + 1) + "), \n";
+                sum = 0;
+            }
+            //at this moment, result contains everything except Header
+            result += parallelResult;
+
+
+            String headerResult = "";
+
+            int seqLength = (seqCode.split("\n")).length;
+            int headerSum = 0;
+            // calculate how many lines the sequential code is, so that we can jump over it
+//        seqLength = seqCode.split("\n").length;
+            int something = 0;
+            // Branch over the sequential part to the wait sequence of code if the branch is not the main branch
+            String branchStarter = "Branch regSprID (Rel " + seqLength + "), \n";
+            for (int i = 0; i < parallelLength.size(); i++) {
+                headerSum = parallelBlocks - i + 1;
+                for (int j = i + 1; j < parallelCode.size(); j++) {
+                    something += (parallelCode.get(j).split("\n")).length + 5;
+                }
+                headerResult += "Branch regSprID (Rel " + (headerSum + seqLength + something) + "), \n";
+                something = 0;
+            }
+
+
+// +5 each   -> + 1
+
+            String finalResult = headerResult + result;
+            program += finalResult;
+            return result;
+        }
+        else {
+            program += seqCode;
+            return seqCode;
+        }
     }
 
     @Override
@@ -128,7 +199,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         if (globalMap.containsKey(id)) {
 
             // If it is, get it from the shared memory and push it to the stack
-            result += "readInstr " + globalMap.get(id) + ", \n";
+            result += "ReadInstr (DirAddr " + globalMap.get(id) + "), \n";
             result += "Push regA, \n";
 
             // Check if it is in any enclosing scope
@@ -396,8 +467,10 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitParallelStat(NaturalParser.ParallelStatContext ctx) {
         String result = "";
+        threadCounter += Integer.parseInt(ctx.expr().getText());
+        result += visit(ctx.stat());
+        parallelCode.add(result);
 
-
-        return super.visitParallelStat(ctx);
+        return "";
     }
 }
