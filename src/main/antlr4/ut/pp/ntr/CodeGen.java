@@ -49,6 +49,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitProgram(NaturalParser.ProgramContext ctx) {
         String result = "";
+        result += "Branch regSprID (Rel 6)";
         for (NaturalParser.StatContext statContext : ctx.stat()) {
             result += visit(statContext);
         }
@@ -394,6 +395,9 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
     @Override
     public String visitParallelStat(NaturalParser.ParallelStatContext ctx) {
+        String result = "";
+
+
         return super.visitParallelStat(ctx);
     }
 }
