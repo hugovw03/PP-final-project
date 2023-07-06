@@ -235,7 +235,8 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     public String visitDeclGlobal(NaturalParser.DeclGlobalContext ctx) {
         String result = "";
         String id = ctx.ID().getText();
-        int position = globalMap.size();
+        //global value stores in sheMem for slot 4 - 7
+        int position = 4 + globalMap.size();
         if (globalMap.containsKey(id)) {
             position = globalMap.get(id);
         }
