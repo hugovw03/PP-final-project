@@ -10,7 +10,7 @@ stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobal
     | RUNPAR LPAR expr RPAR stat                #parallelStat
     | LBRAC stat* RBRAC                         #block
     | PRINT LPAR STRING RPAR SEMICOLON          #printStat
-    | expr DOT lockStatus SEMICOLON             #lockStat
+    | ID DOT lockStatus SEMICOLON               #lockStat
     ;
 
 expr: NOT expr                                  #notExpr
@@ -34,7 +34,6 @@ IF:     'If';
 ELSE:   'Else';
 WHILE:  'While';
 PRINT:  'Print';
-LOCAL:  'Local';
 GLOBAL: 'Global';
 LOCK:   'Lock';
 TRUE:   'True';

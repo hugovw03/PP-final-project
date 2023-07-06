@@ -162,21 +162,28 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitDeclGlobal(NaturalParser.DeclGlobalContext ctx) {
         String result = "";
+        String id = ctx.ID().getText();
         int position = globalMap.size();
+        if (globalMap.containsKey(id)) {
+            position = globalMap.get(id);
+        }
         if (position > 7) {
             System.out.println("visitDeclGlobal: share memory overflow");
         }
-        //if it's a lock
-        if (ctx.type().getText().equals("Lock")){
-            //the global memory is taken and set to 0
-            globalMap.put(ctx.ID().getText(), position);
+        //if it's not assigned with value, we simply put the offset into shMem
+        // we consider it's a lock with unlock mode or a var with value 0
+        if (ctx.ASSIGN() == null) {
+            globalMap.put(id, position);
+            System.out.println(globalMap.keySet());
+            return "";
         }
         else {
-        //put global id into shareMemory map
-        globalMap.put(ctx.ID().getText(), position);
-        visit(ctx.expr());
-        result += "Pop regA, \n"
-                + "WriteInstr regA (DirAddr " + position + "), \n";
+            //put global id into shareMemory map
+            globalMap.put(id, position);
+            result += visit(ctx.expr());
+
+            result += "Pop regA, \n"
+                    + "WriteInstr regA (DirAddr " + position + "), \n";
         }
 //        result += "ReadInstr (DirAddr " + position + "), \n";
 //        result += "Receive regB, \n";
@@ -365,7 +372,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     public String visitLockStat(NaturalParser.LockStatContext ctx) {
         String result = "";
         // Get the id of the lock
-        String id = ctx.expr().getText();
+        String id = ctx.ID().getText();
         // get the address of the lock
         int address = globalMap.get(id);
         // If we want to lock the lock

@@ -28,8 +28,8 @@ public class NaturalGrammarListener extends NaturalBaseListener {
     @Override
     public void exitDeclNormal(NaturalParser.DeclNormalContext ctx) {
         String id = ctx.ID().toString();
-        if (ctx.type().getText().equals("LOCK")) {
-            addError(ctx, "lock has to be declared as Global, like it or not, it will be global anyway");
+        if (ctx.type().getText().equals("Lock")) {
+            addError(ctx, "lock has to be declared as Global");
         }
         if (ctx.ASSIGN() == null) {
             table.put(id, getThisType(ctx.type().getText()));
@@ -277,12 +277,15 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         }
     }
 
-    //TODO: type-Checking Lock, global, local
-
-
     @Override
     public void exitLockStat(NaturalParser.LockStatContext ctx) {
-        super.exitLockStat(ctx);
+         if (table.type(ctx.ID().getText()) != Type.LOCK) {
+             addError(ctx, "This is not a lock.");
+         }
+         String method = ctx.lockStatus().getText();
+         if (!(method.equals("lock") || method.equals("unlock"))) {
+             addError(ctx, "There is no such a method in lock type");
+         }
     }
 
     @Override

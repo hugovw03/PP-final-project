@@ -1,18 +1,30 @@
-after we use the listener generate the symboltable,
-we pass it to visitor, and we play with the memory in visitor,
-generate code that can get values from local memory into
-registers by using the offset.
-
-
-building a map to monitor the status (if occupied) of registers
-
-
-
-Do we put variable values that we declare in the local
-memory when we are doing type checking (listener) or when we are doing
-code generation (visitor)?
+//should print handle vars
+// should concurrency be handled different programs
+// how can we concurrently run different programs
+// should we change our structure to concurrently run different programs
+// how do we implement the parallel part? let the ta explain how the multiplesprockle example does it
+// how do we implement the print statement?
 
 
 
 
-Int a = 5
+
+prog : program+;
+program: stat+ END;
+
+
+Global Lock lock1;
+RunInParallel (2) {
+    Int a = 10;
+    Int b = 20;
+}
+END
+
+Global Lock lock1;
+RunInParallel (2) {
+    Int a = 10;
+    Int b = 20;
+}
+END
+
+

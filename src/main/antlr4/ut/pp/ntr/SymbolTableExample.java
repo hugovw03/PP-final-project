@@ -10,8 +10,11 @@ public class SymbolTableExample {
     public static void main(String[] args) throws ParseException {
         // Create a lexer and parser for your Natural language
         NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
-                "Global Lock lock1; Int a = 10; Int b = 20; If (a IsBiggerThan b) { b = 200;} Else{lock1.lock; a = a + b; lock1.unlock}"
+                " Int x = 5;\n" +
+                        " x = 5 + 3 * x; \n"
 ));
+
+//        Global Lock lock1; Int a = 10; Int b = 20; If (a IsBiggerThan b) { b = 200;} Else{lock1.lock; a = a + b; lock1.unlock}
 //        NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
 //        "Int a = 10;Int b = 20;Int c = 30; {Int d = 40; a = 20; Int c = 50; c = 77;} c = 99;"
 //
@@ -34,6 +37,8 @@ public class SymbolTableExample {
 
         // Obtain the parse tree by invoking the entry rule of your parser
         ParseTree tree = parser.program();
+        NaturalGrammarListener checker = new NaturalGrammarListener();
+        Result g = checker.check(tree);
 
         CodeGen gen = new CodeGen();
         System.out.println(gen.generate(tree));
@@ -43,10 +48,8 @@ public class SymbolTableExample {
         NaturalListener listener = new NaturalGrammarListener() ;
         // Traverse the parse tree using the listener
         ParseTreeWalker walker = new ParseTreeWalker();
-        NaturalGrammarListener checker = new NaturalGrammarListener();
 //        ParseTree body = tree.getChild(0).getChild(2).getChild(0);
 //        ParseTree assX = body.getChild(0);
-        Result g = checker.check(tree);
         System.out.println(g);
 //        System.out.println(assX);
     }
