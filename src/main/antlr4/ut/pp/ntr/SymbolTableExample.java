@@ -10,7 +10,7 @@ public class SymbolTableExample {
     public static void main(String[] args) throws ParseException {
         // Create a lexer and parser for your Natural language
         NaturalLexer lexer = new NaturalLexer(CharStreams.fromString(
-                " Global Int a = 5; Global Int b = 10; a = 100; b =200; Global Lock myLock; myLock.lock;"
+                " Global Int a = 5;  RunInParallel(2) {  a = a + 6;}"
 ));
 
 //        Global Lock lock1; Int a = 10; Int b = 20; If (a IsBiggerThan b) { b = 200;} Else{lock1.lock; a = a + b; lock1.unlock}
