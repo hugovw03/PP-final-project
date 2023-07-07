@@ -1,6 +1,6 @@
 package main.antlr4.ut.pp.ntr;
 
-import main.antlr4.ut.pp.ntr.NaturalGrammarListener;
+import ut.pp.ntr.NaturalGrammarListener;
 
 
 import org.antlr.v4.runtime.CharStreams;

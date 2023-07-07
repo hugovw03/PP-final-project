@@ -1,6 +1,6 @@
-//import main.antlr4.ut.pp.ntr.ParseException;
-//import main.antlr4.ut.pp.ntr.Result;
-//import main.antlr4.ut.pp.ntr.Type;
+//import ut.pp.ntr.ParseException;
+//import ut.pp.ntr.Result;
+//import ut.pp.ntr.Type;
 //import org.antlr.v4.runtime.tree.ParseTree;
 //import org.junit.Test;
 //
