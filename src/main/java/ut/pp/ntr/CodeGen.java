@@ -11,7 +11,10 @@ public class CodeGen extends NaturalBaseVisitor<String> {
 
     private String program;
     private int threadPointer = 1;
+
+    //collect thread amount in each parallel
     private final List<Integer> threadCounter = new ArrayList<>();
+    //collect parallel blocks
     private final List<String> parallelCode = new ArrayList<>();
     //container for all the locks
     //TODO:?
@@ -37,7 +40,8 @@ public class CodeGen extends NaturalBaseVisitor<String> {
         newProgram +=  "       ]\n" +
                 "\n" +
                 "main = run [prog";
-        for (int i = 0; i < threadCounter.size(); i++) {
+        int threadSum = threadPointer -1;
+        for (int i = 0; i < threadSum; i++) {
             newProgram += ", prog";
         }
         newProgram += "]";
