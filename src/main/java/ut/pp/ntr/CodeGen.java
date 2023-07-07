@@ -130,7 +130,22 @@ public class CodeGen extends NaturalBaseVisitor<String> {
             program += seqCode;
             return seqCode;
         }
+            /* this is the structure of parallel
+                        Branch 1
+                        Branch 2
+                        Sequential Code
+                        Thread 1 trigger
+                        Thread 2 trigger
+                        Jump end
+                        Thread waiting 1
+                            Parallel block
+                                Jump end
+                        Thread waiting 2
+                            Parallel block
+                                Jump end
+     */
     }
+
 
     @Override
     public String visitBlock(NaturalParser.BlockContext ctx) {
