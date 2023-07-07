@@ -1,7 +1,7 @@
  /* not lock, data racing happens*/
  Global Int a = 5;
  RunInParallel(4) {
-    Int b = 100;
+    Int b = 50;
     While (b IsBiggerThan 30){
         a = a + 5;
         b = b - 1;

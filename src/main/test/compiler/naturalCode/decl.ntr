@@ -3,3 +3,6 @@ Int a = 8;
 Int b = 20;
 Int c;
 a = a + b * 10 - 3;
+
+/* Boolean */
+Bool d = True;

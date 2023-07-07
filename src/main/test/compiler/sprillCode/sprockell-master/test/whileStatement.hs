@@ -17,7 +17,6 @@ prog = [
        Pop regB, 
        Pop regA, 
        Compute Add regA regB regA, 
-       Compute Sub regA regB regA, 
        Push regA, 
        Pop regC, 
        Load (ImmValue 25) regA, 
@@ -28,11 +27,6 @@ prog = [
        Pop regB, 
        Pop regA, 
        Compute Gt regA regB regA, 
-       Compute Lt regA regB regA, 
-       Compute Equal regA regB regA, 
-       Compute NEq regA regB regA, 
-       Compute GtE regA regB regA, 
-       Compute LtE regA regB regA, 
        Push regA, 
        Pop regA,
        Compute Equal reg0 regA regA,
@@ -59,8 +53,8 @@ prog = [
        Pop regA, 
        Store regA (DirAddr 1), 
        Push regA, 
-       Jump (Rel (-51)),
+       Jump (Rel (-45)),
        EndProg
        ]
 
-main = run [prog]
+main = runWithDebugger (debuggerSimplePrint myShow) [prog]

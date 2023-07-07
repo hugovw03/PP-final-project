@@ -1,4 +1,8 @@
 Int a = 5;
 Int b = 10;
-
 If (a + b IsBiggerThan b) {a = 100;}
+
+Int c = 40;
+Int d = 50;
+Bool e = True;
+If (e) {c = 66;} Else {d = 77;}

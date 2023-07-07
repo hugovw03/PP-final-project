@@ -25,7 +25,6 @@ prog = [
        Pop regB, 
        Pop regA, 
        Compute Add regA regB regA, 
-       Compute Sub regA regB regA, 
        Push regA, 
        Load (ImmValue 3) regA, 
        Push regA, 
@@ -36,6 +35,10 @@ prog = [
        Pop regA, 
        Store regA (DirAddr 0), 
        Push regA, 
+       Load (ImmValue 1) regA, 
+       Push regA, 
+       Pop regA, 
+       Store regA (DirAddr 3), 
        EndProg
        ]
 
