@@ -1,7 +1,0 @@
-Global Int turn = 0;
-Global Bool flag0 = False;
-Global Bool flag1 = False;
-If (theadID IsEqualTo 0){
-
-}
-While ()

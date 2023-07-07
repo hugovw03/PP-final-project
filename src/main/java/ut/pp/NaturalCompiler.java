@@ -1,4 +1,4 @@
-package ut.pp.ntr;
+package ut.pp;
 
 import main.antlr4.ut.pp.parser.NaturalLexer;
 import main.antlr4.ut.pp.parser.NaturalListener;
@@ -6,6 +6,9 @@ import main.antlr4.ut.pp.parser.NaturalParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import ut.pp.ntr.CodeGen;
+import ut.pp.ntr.NaturalGrammarListener;
+import ut.pp.ntr.ParseException;
 
 
 import java.io.IOException;

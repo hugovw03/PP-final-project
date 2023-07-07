@@ -1,7 +1,6 @@
-package main.test.elabration;
 
-import main.antlr4.ut.pp.ntr.NaturalLexer;
-import main.antlr4.ut.pp.ntr.NaturalParser;
+import main.antlr4.ut.pp.parser.NaturalLexer;
+import main.antlr4.ut.pp.parser.NaturalParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Assert;
@@ -9,6 +8,11 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * A ParserTest class which has some tests that ensure that the parse
+ * tree is generated of the given input.
+ */
 
 public class ParserTest {
 
@@ -50,26 +54,22 @@ public class ParserTest {
      */
     @Test
     public void testInvalidDeclaration() {
-        System.out.println("-----");
-        String input1 = "I//////nt x = 5;"; // [no viable alternative at input 'Int'], scanner fails on this too
-        String input2 = "x = 10;"; // [no viable alternative at input 'Int']
         String input3 = "Int x = 10"; // [missing ';' at '<EOF>']
         String input4 = "int x = 10;"; // [no viable alternative at input 'intx']
         String input5 = "local Int x = 45"; // [no viable alternative at input 'localInt', missing ';' at '<EOF>']
         String input6 = "Global Int variable = \"word\";"; // mismatched input "word"...
         String input7 = "Global Boolean someB = False;"; // [extraneous input 'someB' expecting {'=', ';'}, missing {'Int', 'Bool', 'Lock'} at 'Boolean']
-        String input8 = "Bool someBoolean = true;";
 
-        Assert.assertFalse(getParsingErrorMessages(input1).isEmpty());
-        Assert.assertFalse(getParsingErrorMessages(input2).isEmpty());
         Assert.assertFalse(getParsingErrorMessages(input3).isEmpty());
+        getParsingErrorMessages(input3).clear();
         Assert.assertFalse(getParsingErrorMessages(input4).isEmpty());
+        getParsingErrorMessages(input4).clear();
         Assert.assertFalse(getParsingErrorMessages(input5).isEmpty());
+        getParsingErrorMessages(input5).clear();
         Assert.assertFalse(getParsingErrorMessages(input6).isEmpty());
+        getParsingErrorMessages(input6).clear();
         Assert.assertFalse(getParsingErrorMessages(input7).isEmpty());
-        Assert.assertFalse(getParsingErrorMessages(input8).isEmpty());
-
-        System.out.println(getParsingErrorMessages(input8));
+        getParsingErrorMessages(input7).clear();
     }
 
     /**
@@ -77,29 +77,97 @@ public class ParserTest {
      */
     @Test
     public void testValidDeclaration() {
-        String input1 = "Int x = 5;";
+        String input = "Int x = 5;";
         String input2 = "Int x;";
         String input3 = "Global Int x;";
         String input4 = "Global Int x = 5;";
-        String input5 = "Local Int x = 10;";
         String input6 = "Global Lock myLock;";
-        String input7 = "Local Lock anotherLock;";
-        String input8 = "Local Int variable;";
+        String input7 = "Lock anotherLock;";
         String input9 = "Bool someBoolean = True;";
         String input10 = "Global Bool someBoolean = True;";
-        Assert.assertTrue("This is a valid input", getParsingErrorMessages(input1).isEmpty());
+
+        Assert.assertTrue(getParsingErrorMessages(input).isEmpty());
+        getParsingErrorMessages(input).clear();
         Assert.assertTrue("This is a valid input", getParsingErrorMessages(input2).isEmpty());
+        getParsingErrorMessages(input2).clear();
         Assert.assertTrue("This is a valid input", getParsingErrorMessages(input3).isEmpty());
+        getParsingErrorMessages(input3).clear();
         Assert.assertTrue("This is a valid input", getParsingErrorMessages(input4).isEmpty());
-        Assert.assertTrue("This is a valid input", getParsingErrorMessages(input5).isEmpty());
+        getParsingErrorMessages(input4).clear();
         Assert.assertTrue("This is a valid input", getParsingErrorMessages(input6).isEmpty());
+        getParsingErrorMessages(input6).clear();
         Assert.assertTrue("This is a valid input", getParsingErrorMessages(input7).isEmpty());
-        Assert.assertTrue("This is a valid input", getParsingErrorMessages(input8).isEmpty());
+        getParsingErrorMessages(input7).clear();
         Assert.assertTrue("This is a valid input", getParsingErrorMessages(input9).isEmpty());
+        getParsingErrorMessages(input9).clear();
         Assert.assertTrue("This is a valid input", getParsingErrorMessages(input10).isEmpty());
+        getParsingErrorMessages(input10).clear();
     }
 
-//    @Test
-//    public void
+    /**
+     * A test to check if the parser accepts simple if statements.
+     */
+    @Test
+    public void testIfDeclarations() {
+        String input1 = "Int x = 10;\n" +
+                "If (x IsEqualTo 11) {\n" +
+                "    Int y = 11; \n" +
+                "}";
+        Assert.assertTrue("This is a valid If block", getParsingErrorMessages(input1).isEmpty());
+        getParsingErrorMessages(input1).clear();
 
+        String input2 = "Int x = 10;\n" +
+                "If x IsEqualTo 11 {\n" +
+                "    Int y = 11; \n" +
+                "}";
+        Assert.assertFalse(getParsingErrorMessages(input2).isEmpty());
+        getParsingErrorMessages(input2).clear();
+
+        String input3 = "Int x = 10;\n" +
+                "If (x IsEqualTwo 11) {\n" +
+                "    Int y = 11; \n" +
+                "}";
+        Assert.assertFalse(getParsingErrorMessages(input3).isEmpty());
+        getParsingErrorMessages(input3).clear();
+    }
+
+    /**
+     * A test to ensure that While loop with contents inside of it could get parsed.
+     */
+    @Test
+    public void testWhileDeclarations() {
+        String someInput = "Int number = 1;\n" +
+                "While(number IsBiggerThanOrEqualTo 0) {\n" +
+                "    Int x = 10;\n" +
+                "    If (x IsEqualTo 11) {\n" +
+                "        Int y = 11; \n" +
+                "    }\n" +
+                "}";
+        Assert.assertTrue("This is a valid input", getParsingErrorMessages(someInput).isEmpty());
+        getParsingErrorMessages(someInput).clear();
+
+        String someInput1 = "Int anotherNumber = 2;\n" +
+                "While(anotherNumber IsBiggerThan 0) {\n" +
+                "    While(number IsBiggerThanOrEqualTo 0) {\n" +
+                "        Int x = 10;\n" +
+                "        If (x IsEqualTo 11) {\n" +
+                "            Int y = 11; \n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+        Assert.assertTrue("This is a valid input", getParsingErrorMessages(someInput1).isEmpty());
+        getParsingErrorMessages(someInput1).clear();
+
+        String someInput2 = "Int anotherNumber = 2;\n" +
+                "While(anotherNumber IsBiggerThan 0) {\n" +
+                "    While(number IsBiggerThanOrEqualTo 0) {\n" +
+                "        Int x = 10;\n" +
+                "        If (x IsEqualTo 11) {\n" +
+                "            Int y = 11; \n" +
+                "        }\n" +
+                "    }\n" +
+                "";
+        Assert.assertFalse(getParsingErrorMessages(someInput2).isEmpty());
+        getParsingErrorMessages(someInput2).clear();
+    }
 }

@@ -320,7 +320,14 @@ public class CodeGen extends NaturalBaseVisitor<String> {
 
         // Check if the condition is true or false
         result += "Pop regA, \n";
-        //TODO: if statement with no else
+        if (ctx.stat(1) == null) {
+            String leftInput = visit(ctx.stat(0));
+            int trueCase  = leftInput.split("\n").length + 1;
+            result += "Compute Equal reg0 regA regA,\n";
+            result += "Branch regA (Rel " + trueCase + "),\n";
+            result += leftInput;
+            return result;
+        }
         String leftInput = visit(ctx.stat(0));
         String rightInput = visit(ctx.stat(1));
 
