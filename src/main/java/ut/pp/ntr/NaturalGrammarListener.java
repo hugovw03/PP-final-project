@@ -67,8 +67,6 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         this.table.closeScope();
     }
 
-
-    //TODO: Add negative number rule, might need to be checked in listener
     @Override
     public void exitConstExpr(NaturalParser.ConstExprContext ctx) {
         Token constantToken = ctx.start; // Get the token representing the constant
