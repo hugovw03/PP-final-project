@@ -9,7 +9,7 @@ Basic statements: Assignments, if, while and print
 -- Global & Local & Lock
         Global Int a;
         Local Int b;
-        Lock lock;
+        Global Lock lock;
 
 -- local, nested scopes.
         Int a;

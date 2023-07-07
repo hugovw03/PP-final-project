@@ -54,6 +54,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         for (NaturalParser.StatContext statContext : ctx.stat()) {
             seqCode += visit(statContext);
         }
+        //if there are parallel blocks
         if (parallelCode.size() != 0) {
             // get the amount of parallel blocks we want to run
             int parallelBlocks = parallelCode.size();
@@ -83,6 +84,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
                     "Compute Equal regD reg0 regE, \n" +
                     "Branch regD (Rel (-3)), \n";
 
+            //Collecting parallel blocks
             String parallelResult = "";
             int sum = 0;
             for (int i = 0; i < parallelCode.size(); i++) {
@@ -91,40 +93,36 @@ public class CodeGen extends NaturalBaseVisitor<String>{
                 for (int j = i + 1; j < parallelCode.size(); j++) {
                     sum += (parallelCode.get(j).split("\n")).length + 5;
                 }
-
                 parallelResult += "Jump (Rel " + (sum + 1) + "), \n";
                 sum = 0;
             }
+
             //at this moment, result contains everything except Header
             result += parallelResult;
 
-
+            //Collect sequential codes
             String headerResult = "";
 
             int seqLength = (seqCode.split("\n")).length;
             int headerSum = 0;
             // calculate how many lines the sequential code is, so that we can jump over it
-//        seqLength = seqCode.split("\n").length;
             int something = 0;
-            // Branch over the sequential part to the wait sequence of code if the branch is not the main branch
-            String branchStarter = "Branch regSprID (Rel " + seqLength + "), \n";
             for (int i = 0; i < parallelLength.size(); i++) {
                 headerSum = parallelBlocks - i + 1;
                 for (int j = i + 1; j < parallelCode.size(); j++) {
                     something += (parallelCode.get(j).split("\n")).length + 5;
                 }
-
+                //for each parallel blocks, we create new threads
                 headerResult += "Branch regSprID (Rel " + (headerSum + seqLength + something) + "), \n";
                 something = 0;
             }
 
-
-// +5 each   -> + 1
-
+            //glue header and parallel instructions
             String finalResult = headerResult + result;
             program += finalResult;
             return result;
         }
+        //if there is no parallel block
         else {
             program += seqCode;
             return seqCode;
@@ -186,10 +184,9 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             offset = globalMap.get(ctx.ID().getText());
             result += "WriteInstr regA (DirAddr " + offset + "), \n";
         }else {
-            //TODO: throw error
+            throw new IllegalArgumentException("The variable is not defined");
         }
         result += "Push regA, \n";
-
         return result;
     }
 
@@ -197,10 +194,8 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     public String visitIdExpr(NaturalParser.IdExprContext ctx) {
         String result = "";
         String id = ctx.ID().getText();
-
-        // Check if the Id is a globally defined variable
+        // Check if the id is a globally defined variable
         if (globalMap.containsKey(id)) {
-
             // If it is, get it from the shared memory and push it to the stack
             result += "ReadInstr (DirAddr " + globalMap.get(id) + "), \n";
             result += "Receive regA, \n"
@@ -208,12 +203,12 @@ public class CodeGen extends NaturalBaseVisitor<String>{
 
             // Check if it is in any enclosing scope
         } else if (symbolTable.containInScope(id)) {
-
             // If it is, load it from the local memory and push it to the stack
             int offset = symbolTable.offset(id);
             result += "Load (DirAddr " + offset + ") regA, \n";
             result += "Push regA, \n";
-        } else {// TODO: throw some error?
+        } else {
+            throw new IllegalArgumentException("The variable is not defined");
         }
         return result;
     }
@@ -223,6 +218,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
         String result = "";
         symbolTable.put(ctx.ID().getText(), getThisType(ctx.type().getText()));
         int offset = symbolTable.offset(ctx.ID().getText());
+        //if no value assigned, set it to 0/False
         if (ctx.ASSIGN().getSymbol() == null) {
             result += "Load (ImmValue 0) regA, \n"
                     + "Store regA (DirAddr " + offset + "), \n";
@@ -245,6 +241,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             position = globalMap.get(id);
         }
         if (position > 7) {
+            //TODO: throw
             System.out.println("visitDeclGlobal: share memory overflow");
         }
         //if it's not assigned with value, we simply put the offset into shMem
@@ -262,11 +259,6 @@ public class CodeGen extends NaturalBaseVisitor<String>{
             result += "Pop regA, \n"
                     + "WriteInstr regA (DirAddr " + position + "), \n";
         }
-//        result += "ReadInstr (DirAddr " + position + "), \n";
-//        result += "Receive regB, \n";
-//        result += "Compute NEq regA regB regC, \n";
-//        result += "Branch regC (Rel (-4)), \n";
-//        program += result;
         return result;
     }
 
@@ -443,7 +435,7 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitPrintStat(NaturalParser.PrintStatContext ctx) {
         String result = "";
-//        result += visit(ctx.expr());
+        result += visit(ctx.expr());
         result += "Pop regA, \n";
         result += "WriteInstr regA charIO, \n";
         return result;
@@ -476,11 +468,13 @@ public class CodeGen extends NaturalBaseVisitor<String>{
     @Override
     public String visitParallelStat(NaturalParser.ParallelStatContext ctx) {
         String result = "";
+        //save info for generating parallel instruction
         threadCounter.add(Integer.parseInt(ctx.expr().getText()));
         result += visit(ctx.stat());
         parallelCode.add(result);
 
         String trigger = "";
+        //set trigger to each thread
         for (int k = 0; k < threadCounter.get(threadCounter.size()-1); k ++) {
              trigger += "WriteInstr regA (DirAddr "+ threadPointer + "),\n";
             threadPointer += 1;

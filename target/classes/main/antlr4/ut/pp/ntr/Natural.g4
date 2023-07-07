@@ -9,7 +9,7 @@ stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobal
     | WHILE LPAR expr RPAR stat                 #whileStat
     | RUNPAR LPAR expr RPAR stat                #parallelStat
     | LBRAC stat* RBRAC                         #block
-    | PRINT LPAR STRING RPAR SEMICOLON          #printStat
+    | PRINT LPAR expr RPAR SEMICOLON          #printStat
     | ID DOT lockStatus SEMICOLON               #lockStat
     ;
 
