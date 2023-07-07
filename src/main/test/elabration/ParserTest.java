@@ -1,3 +1,5 @@
+package main.test.elabration;
+
 import main.antlr4.ut.pp.ntr.NaturalLexer;
 import main.antlr4.ut.pp.ntr.NaturalParser;
 import org.antlr.v4.runtime.*;

@@ -1,4 +1,4 @@
-package main.test;
+package main.test.elabration;
 
 import main.antlr4.ut.pp.ntr.*;
 import org.antlr.v4.runtime.*;
