@@ -2,7 +2,7 @@
  Global Int a = 5;
  Global Lock myLock;
  RunInParallel(4) {
-    Int b = 100;
+    Int b = 70;
     While (b IsBiggerThan 30){
         myLock.lock;
         a = a + 5;

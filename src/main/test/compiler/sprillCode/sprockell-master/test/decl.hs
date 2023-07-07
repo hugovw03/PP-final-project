@@ -36,12 +36,6 @@ prog = [
        Pop regA, 
        Store regA (DirAddr 0), 
        Push regA, 
-       Load (ImmValue 1) regA, 
-       Push regA, 
-       Pop regA, 
-       Store regA (DirAddr 3), 
-       Load (ImmValue 0) regA, 
-       Store regA (DirAddr 4), 
        EndProg
        ]
 

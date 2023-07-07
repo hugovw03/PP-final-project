@@ -16,7 +16,7 @@ prog = [
        Receive regD, 
        Compute Equal regD reg0 regE, 
        Branch regD (Rel (-3)), 
-       Load (ImmValue 100) regA, 
+       Load (ImmValue 70) regA, 
        Push regA, 
        Pop regA, 
        Store regA (DirAddr 0), 
@@ -76,4 +76,4 @@ prog = [
        EndProg
        ]
 
-main = run [prog, prog, prog, prog, prog]
+main = runWithDebugger (debuggerSimplePrint myShow) [prog, prog, prog, prog, prog]
