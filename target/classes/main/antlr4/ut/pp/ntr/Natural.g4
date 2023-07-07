@@ -11,7 +11,6 @@ stat: decl type ID (ASSIGN expr)? SEMICOLON     #declGlobal
     | LBRAC stat* RBRAC                         #block
     | PRINT LPAR expr RPAR SEMICOLON            #printStat
     | ID DOT lockStatus SEMICOLON               #lockStat
-    | COMMENT                                   #commentStat
     ;
 
 expr: NOT expr                                  #notExpr

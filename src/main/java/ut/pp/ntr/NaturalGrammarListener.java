@@ -304,6 +304,16 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         setType(ctx, getThisType(ctx.type().getText()));
     }
 
+    @Override
+    public void exitPrintStat(NaturalParser.PrintStatContext ctx) {
+        if (ctx.expr().getChildCount() > 1) {
+            addError(ctx, "Print only accepts id or integer/boolean");
+        }
+        if (ctx.expr().getChild(0).getChildCount() > 1) {
+            addError(ctx, "Print only accepts id or integer/boolean");
+        }
+    }
+
     /** Indicates if any errors were encountered in
      * this tree listener. */
     public boolean hasErrors() {

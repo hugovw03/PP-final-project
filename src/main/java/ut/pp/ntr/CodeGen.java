@@ -16,9 +16,6 @@ public class CodeGen extends NaturalBaseVisitor<String> {
     private final List<Integer> threadCounter = new ArrayList<>();
     //collect parallel blocks
     private final List<String> parallelCode = new ArrayList<>();
-    //container for all the locks
-    //TODO:?
-    private final Map<String, Integer> lockMap = new HashMap<>();
     //container for all the global vars
     private final Map<String, Integer> globalMap = new HashMap<>();
     //symbol table for local vars, nested vars
@@ -225,7 +222,7 @@ public class CodeGen extends NaturalBaseVisitor<String> {
         symbolTable.put(ctx.ID().getText(), getThisType(ctx.type().getText()));
         int offset = symbolTable.offset(ctx.ID().getText());
         //if no value assigned, set it to 0/False
-        if (ctx.ASSIGN().getSymbol() == null) {
+        if (ctx.ASSIGN() == null) {
             result += "Load (ImmValue 0) regA, \n"
                     + "Store regA (DirAddr " + offset + "), \n";
         }
@@ -247,8 +244,8 @@ public class CodeGen extends NaturalBaseVisitor<String> {
             position = globalMap.get(id);
         }
         if (position > 7) {
-            //TODO: throw
             System.out.println("visitDeclGlobal: share memory overflow");
+            throw new RuntimeException("share memory overflow");
         }
         //if it's not assigned with value, we simply put the offset into shMem
         // we consider it's a lock with unlock mode or a var with value 0
