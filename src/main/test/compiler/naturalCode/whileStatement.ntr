@@ -1,0 +1,7 @@
+Int a = 10;
+Int b = 20;
+
+While (a+b IsBiggerThan 25) {
+    a = a-1;
+    b = b-1;
+}

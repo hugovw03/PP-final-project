@@ -1,0 +1,4 @@
+Int a = 5;
+Int b = 10;
+
+If (a + b IsBiggerThan b) {a = 100;} Else { b = 50;}

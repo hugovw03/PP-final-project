@@ -1,0 +1,9 @@
+/* Print support integer, boolean, variable */
+
+Int a = 5;
+Print (a);
+
+Bool b = True;
+Print (b);
+
+Print(6);

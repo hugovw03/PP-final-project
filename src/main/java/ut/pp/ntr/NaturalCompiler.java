@@ -1,29 +1,21 @@
 package ut.pp.ntr;
 
-import main.antlr4.ut.pp.ntr.NaturalLexer;
-import main.antlr4.ut.pp.ntr.NaturalListener;
-import main.antlr4.ut.pp.ntr.NaturalParser;
+import main.antlr4.ut.pp.parser.NaturalLexer;
+import main.antlr4.ut.pp.parser.NaturalListener;
+import main.antlr4.ut.pp.parser.NaturalParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import java.io.File;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
+
 
 public class NaturalCompiler {
     private final static String INPUT = "src/main/test/compiler/naturalCode/";
     private final static String OUTPUT = "src/main/test/compiler/sprillCode/sprockell-master/test";
-
-
-    private static CodeGen generator = new CodeGen();
-    private static NaturalListener checker = new NaturalGrammarListener();
 
     public static void main(String[] args) {
         Path sourceRoot = Path.of(INPUT); // Replace "source_root" with the actual root directory path

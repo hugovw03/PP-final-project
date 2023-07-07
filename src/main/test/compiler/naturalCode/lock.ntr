@@ -1,0 +1,6 @@
+/* There can be multiple locks */
+
+Global Lock myLock;
+Global Lock myLock2;
+myLock.lock;
+myLock.unlock;

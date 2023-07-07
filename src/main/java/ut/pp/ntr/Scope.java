@@ -1,7 +1,5 @@
 package ut.pp.ntr;
 
-import ut.pp.ntr.Type;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 

@@ -1,0 +1,5 @@
+/* Global decl and assign */
+Global Bool bool = True;
+Global Bool booool;
+Global Int a = 10;
+Global Int b;

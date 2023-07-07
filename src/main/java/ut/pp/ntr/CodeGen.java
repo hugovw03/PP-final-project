@@ -1,7 +1,7 @@
 package ut.pp.ntr;
 
-import main.antlr4.ut.pp.ntr.NaturalBaseVisitor;
-import main.antlr4.ut.pp.ntr.NaturalParser;
+import main.antlr4.ut.pp.parser.NaturalBaseVisitor;
+import main.antlr4.ut.pp.parser.NaturalParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 
@@ -267,12 +267,12 @@ public class CodeGen extends NaturalBaseVisitor<String> {
 
     //Helper function, for assign values
     private Type getThisType(String type) {
-        return switch (type) {
-            case "Int" -> Type.INT;
-            case "Bool" -> Type.BOOL;
-            case "Lock" -> throw new IllegalArgumentException("getThisType: The lock must be declare as Global");
-            default -> throw new IllegalArgumentException("getThisType: This input is not valid type");
-        };
+         switch (type) {
+            case "Int" : return Type.INT;
+            case "Bool": return Type.BOOL;
+            case "Lock": throw new IllegalArgumentException("getThisType: The lock must be declare as Global");
+            default : throw new IllegalArgumentException("getThisType: This input is not valid type");
+        }
     }
 
 
@@ -293,12 +293,12 @@ public class CodeGen extends NaturalBaseVisitor<String> {
 
         String op = ctx.getChild(1).getText();
         switch (op) {
-            case "IsBiggerThan" -> result += "Compute Gt regA regB regA, \n";
-            case "IsSmallerThan" -> result += "Compute Lt regA regB regA, \n";
-            case "IsEqualTo" -> result += "Compute Equal regA regB regA, \n";
-            case "IsNotEqualTo" -> result += "Compute NEq regA regB regA, \n";
-            case "IsBiggerThanOrEqualTo" -> result += "Compute GtE regA regB regA, \n";
-            case "IsSmallerThanOrEqualTo" -> result += "Compute LtE regA regB regA, \n";
+            case "IsBiggerThan" : result += "Compute Gt regA regB regA, \n";
+            case "IsSmallerThan" : result += "Compute Lt regA regB regA, \n";
+            case "IsEqualTo" : result += "Compute Equal regA regB regA, \n";
+            case "IsNotEqualTo" : result += "Compute NEq regA regB regA, \n";
+            case "IsBiggerThanOrEqualTo" : result += "Compute GtE regA regB regA, \n";
+            case "IsSmallerThanOrEqualTo" : result += "Compute LtE regA regB regA, \n";
         }
         result += "Push regA, \n";
         return result;
@@ -403,8 +403,8 @@ public class CodeGen extends NaturalBaseVisitor<String> {
         result += "Pop regA, \n";
 
         switch (ctx.op().getText()) {
-            case "+" -> result += "Compute Add regA regB regA, \n";
-            case "-" -> result += "Compute Sub regA regB regA, \n";
+            case "+" : result += "Compute Add regA regB regA, \n";
+            case "-" : result += "Compute Sub regA regB regA, \n";
         }
         result += "Push regA, \n";
         return result;

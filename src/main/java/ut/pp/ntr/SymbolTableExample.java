@@ -1,8 +1,11 @@
 package ut.pp.ntr;
 
-import main.antlr4.ut.pp.ntr.NaturalLexer;
-import main.antlr4.ut.pp.ntr.NaturalListener;
-import main.antlr4.ut.pp.ntr.NaturalParser;
+import main.antlr4.ut.pp.parser.NaturalLexer;
+import main.antlr4.ut.pp.parser.NaturalListener;
+import main.antlr4.ut.pp.parser.NaturalParser;
+import main.antlr4.ut.pp.parser.NaturalLexer;
+import main.antlr4.ut.pp.parser.NaturalListener;
+import main.antlr4.ut.pp.parser.NaturalParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;

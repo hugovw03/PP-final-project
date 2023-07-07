@@ -1,0 +1,12 @@
+ /* Since we dont have a garbage bin, iteration of 100 times will cause stack overflow */
+ Global Int a = 5;
+ Global Lock myLock;
+ RunInParallel(4) {
+    Int b = 100;
+    While (b IsBiggerThan 30){
+        myLock.lock;
+        a = a + 5;
+        myLock.unlock;
+        b=b-1;
+    }
+}

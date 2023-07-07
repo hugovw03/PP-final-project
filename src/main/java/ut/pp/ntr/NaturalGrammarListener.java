@@ -1,8 +1,8 @@
 package ut.pp.ntr;
 
-import main.antlr4.ut.pp.ntr.NaturalBaseListener;
-import main.antlr4.ut.pp.ntr.NaturalLexer;
-import main.antlr4.ut.pp.ntr.NaturalParser;
+import main.antlr4.ut.pp.parser.NaturalBaseListener;
+import main.antlr4.ut.pp.parser.NaturalLexer;
+import main.antlr4.ut.pp.parser.NaturalParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
