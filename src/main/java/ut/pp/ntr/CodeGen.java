@@ -427,7 +427,7 @@ public class CodeGen extends NaturalBaseVisitor<String> {
         String result = "";
         result += visit(ctx.expr());
         result += "Pop regA, \n";
-        result += "WriteInstr regA charIO, \n";
+        result += "WriteInstr regA numberIO, \n";
         return result;
     }
 
