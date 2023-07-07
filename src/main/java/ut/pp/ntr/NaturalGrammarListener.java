@@ -314,21 +314,21 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         }
     }
 
-    /** Indicates if any errors were encountered in
-     * this tree listener. */
+    /* Indicates if any errors were encountered in
+     this tree listener. */
     public boolean hasErrors() {
         return !getErrors().isEmpty();
     }
 
-    /** Returns the list of errors collected in
-     * this tree listener. */
+    /* Returns the list of errors collected in
+      this tree listener. */
     public List<String> getErrors() {
         return this.errors;
     }
 
-    /** Checks the inferred type of a given parse tree,
-     * and adds an error if it does not correspond to
-     * the expected type.
+    /* Checks the inferred type of a given parse tree,
+      and adds an error if it does not correspond to
+      the expected type.
      */
     private void checkType(ParserRuleContext node, Type expected) {
         Type actual = getType(node);
@@ -349,11 +349,7 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         addError(node.getStart(), message, args);
     }
 
-    /** Records an error at a given token.
-     * @param token the token at which the error occurred
-     * @param message the error message
-     * @param args arguments for the message, see {@link String#format}
-     */
+    /* Records an error at a given token */
     private void addError(Token token, String message, Object... args) {
         int line = token.getLine();
         int column = token.getCharPositionInLine();
@@ -363,12 +359,12 @@ public class NaturalGrammarListener extends NaturalBaseListener {
         this.errors.add(message);
     }
 
-    /** Convenience method to add a type to the result. */
+    /* Convenience method to add a type to the result. */
     private void setType(ParseTree node, Type type) {
         this.result.setType(node, type);
     }
 
-    /** Returns the type of a given expression or type node. */
+    /* Returns the type of a given expression or type node. */
     private Type getType(ParseTree node) {
         return this.result.getType(node);
     }

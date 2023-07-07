@@ -1,10 +1,10 @@
 package ut.pp.ntr;
 
 public enum TypeKind {
-    /** Integer base type. */
+    /* Integer base type. */
     INT,
-    /** Boolean base type. */
+    /* Boolean base type. */
     BOOL,
-    /** Lock type. */
+    /* Lock type. */
     LOCK
 }
